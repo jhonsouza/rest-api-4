@@ -10,7 +10,7 @@ app.use(function (error, req, res, next) {
 	if (error.message === 'Post not found') {
 		return res.status(404).send(e.message);
 	}
-	res.status(500).send(e.message);
+	res.status(500).send(error.message);
 });
 
 app.listen(3000);
