@@ -33,4 +33,4 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USER }}/test:latest
-            ${{ secrets.DOCKER_USER }}/test:${{ step.vars.outputs.tag }}
+            ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
