@@ -22,8 +22,15 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Taggin image
+        shell: bash
+        id: vars
+        run: |
+          echo "::set-output name=tag::$(git rev-parse --short HEAD)"
       - name: Docker Push
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKER_USER }}/test:latest
+          tags: |
+            ${{ secrets.DOCKER_USER }}/test:latest
+            ${{ secrets.DOCKER_USER }}/test:${{ step.vars.outputs.tag }}
