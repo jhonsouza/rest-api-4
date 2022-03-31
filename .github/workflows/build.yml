@@ -43,11 +43,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: validação do status do job
-        id: valida
-        run: |
-          echo "::set-output name=status::$(github.job.build.status)"
       - name: print valor
+        if: ${{ github.job.build.status }} == "success"
         run: |
-          echo "${{ steps.valida.outputs.status}}"
-          echo "${{ github.job.build.status }}"
+          echo "O step foi um sucesso"
+      - run: |
+          echo "o step falhou"
