@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "::set-output name=tag::$(git rev-parse --short HEAD)"
           echo "::set-output name=author::$(git log -n 1 | grep Author | cut -d: -f2)"
-          git log -n 1 | grep Author | cut -d: -f2
+          git log -n 1 | grep Author | cut -d -d' ' -f2,3
       # - name: Test
       #   run: |
       #     npm i && npm test
@@ -44,6 +44,7 @@ jobs:
       - if: job.status == 'success'
         run: |
           echo "O step foi um sucesso"
+          echo $GITHUB_ACTOR
       - if: job.status != 'success'
         run: |
           echo "o step falhou"
