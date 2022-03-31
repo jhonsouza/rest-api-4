@@ -1,3 +1,4 @@
 node_modules/
 devops.txt
 .docker
+package-lock.json
