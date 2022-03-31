@@ -44,9 +44,9 @@ jobs:
     if: ${{ always() }}
     needs: build
     steps:
-      - if: github.job.build.status == 'success'
+      - if: job.build.status == 'success'
         run: |
           echo "O step foi um sucesso"
-      - if: github.job.build.status != 'success'
+      - if: job.build.status != 'success'
         run: |
           echo "o step falhou"
