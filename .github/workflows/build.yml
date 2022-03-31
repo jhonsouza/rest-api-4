@@ -46,7 +46,8 @@ jobs:
       - name: validação do status do job
         id: valida
         run: |
-          echo "::set-output name=status::${{ github.job.build.status}}"
+          echo "::set-output name=status::$(github.job.build.status)"
       - name: print valor
         run: |
           echo "${{ steps.valida.outputs.status}}"
+          echo "${{ github.job.build.status }}"
