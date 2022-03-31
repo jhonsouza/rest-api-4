@@ -29,9 +29,9 @@ jobs:
         id: vars
         run: |
           echo "::set-output name=tag::$(git rev-parse --short HEAD)"
-      # - name: Test
-      #   run: |
-      #     npm i && npm test
+      - name: Test
+        run: |
+          npm i && npm test
       - name: Docker Push
         uses: docker/build-push-action@v2
         with:
@@ -43,8 +43,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: print valor
-        if: ${{ github.job.build.status }} == "success"
+      - if: github.job.build.status == 'success'
+        name: print valor
         run: |
           echo "O step foi um sucesso"
       - run: |
