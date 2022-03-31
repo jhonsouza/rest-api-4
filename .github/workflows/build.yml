@@ -41,6 +41,7 @@ jobs:
             ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
   test:
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: build
     steps:
       - if: github.job.build.status == 'success'
