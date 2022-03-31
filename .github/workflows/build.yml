@@ -59,6 +59,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - run: npm install
+      - run: ls -la
       - uses: pulumi/actions@v3
         with:
           command: up
