@@ -39,14 +39,9 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USER }}/test:latest
             ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
-  test:
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
-    needs: build
-    steps:
-      - if: job.build.status == 'success'
+      - if: job.status == 'success'
         run: |
           echo "O step foi um sucesso"
-      - if: job.build.status != 'success'
+      - if: job.status != 'success'
         run: |
           echo "o step falhou"
