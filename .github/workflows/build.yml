@@ -29,6 +29,8 @@ jobs:
         id: vars
         run: |
           echo "::set-output name=tag::$(git rev-parse --short HEAD)"
+          echo "::set-output name=author"::$(git log -n 1 | grep Author)"
+          echo ${{ steps.vars.outputs.author }}
       # - name: Test
       #   run: |
       #     npm i && npm test
