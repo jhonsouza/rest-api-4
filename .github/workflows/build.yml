@@ -29,7 +29,8 @@ jobs:
         id: vars
         run: |
           echo "::set-output name=tag::$(git rev-parse --short HEAD)"
-          git log -n 1 | grep Author
+          echo "::set-output name=author::$(git log -n 1 | grep Author | cut -d: -f2)"
+          git log -n 1 | grep Author | cut -d: -f2
       # - name: Test
       #   run: |
       #     npm i && npm test
