@@ -44,9 +44,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./pulumi-infra
+    # defaults:
+    #   run:
+    #     working-directory: ./pulumi-infra
     steps:
       - uses: actions/checkout@v3
         with:
