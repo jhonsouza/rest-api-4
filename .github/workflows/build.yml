@@ -48,7 +48,11 @@ jobs:
       run:
         working-directory: ./pulumi-infra
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          repository: jhonsouza/pulumi-infra
+          path: master
+      - run: ls -la
       - uses: actions/setup-node@v2
         with:
           node-version: 14
@@ -61,8 +65,7 @@ jobs:
       - run: npm install
       - uses: pulumi/actions@v3
         with:
-          command: destroy
+          command: up
           stack-name: dev
-          work-dir: pulumi-infra
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
