@@ -52,6 +52,7 @@ jobs:
         with:
           repository: jhonsouza/pulumi-infra
           path: master
+          token: ${{ secrets.GIT_TOKEN}}
       - run: ls -la
       - uses: actions/setup-node@v2
         with:
