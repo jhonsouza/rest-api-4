@@ -51,9 +51,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           repository: jhonsouza/pulumi-infra
-          path: master
+          path: infra
           token: ${{ secrets.GIT_TOKEN}}
-      - run: ls -la
+      - run: ls -la infra
       - uses: actions/setup-node@v2
         with:
           node-version: 14
@@ -68,5 +68,6 @@ jobs:
         with:
           command: up
           stack-name: dev
+          work-dir: infra
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
