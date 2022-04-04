@@ -7,7 +7,7 @@ on:
 
 env:
   REPO:  ${{ secrets.DOCKER_USER }}/test
-  TAG: echo $(git rev-parse --short HEAD)
+
 
 jobs:
   build:
@@ -47,7 +47,7 @@ jobs:
           push: true
           tags: |
             $REPO:latest
-            ${{ secrets.DOCKER_USER }}/test:$TAG
+            ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
   deploy:
     needs: build
     runs-on: ubuntu-latest
