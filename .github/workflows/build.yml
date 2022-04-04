@@ -5,6 +5,10 @@ on:
     branches:
       - 'main'
 
+env:
+  REPO:  ${{ secrets.DOCKER_USER }}/test
+  TAG: echo $(git rev-parse --short HEAD)
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,11 +40,14 @@ jobs:
       #     npm i && npm test
       - name: Docker Push
         uses: docker/build-push-action@v2
+        id: docker
+        run: |
+          echo "::set-output name=image::${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}"
         with:
           push: true
           tags: |
-            ${{ secrets.DOCKER_USER }}/test:latest
-            ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
+            $REPO:latest
+            ${{ secrets.DOCKER_USER }}/test:$TAG
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -53,7 +60,6 @@ jobs:
           repository: jhonsouza/pulumi-infra
           path: infra
           token: ${{ secrets.GIT_TOKEN}}
-      - run: ls -la infra
       - uses: actions/setup-node@v2
         with:
           node-version: 14
@@ -65,9 +71,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - run: cd infra && npm ci
       - uses: pulumi/actions@v3
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         with:
           command: up
           stack-name: dev
           work-dir: infra
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
