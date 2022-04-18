@@ -45,7 +45,7 @@ jobs:
         with:
           push: true
           tags: |
-            $REPO:latest
+            ${{ env.REPO }}:latest
             ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
   deploy:
     needs: build
