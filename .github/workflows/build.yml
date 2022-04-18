@@ -42,8 +42,6 @@ jobs:
       - name: Docker Push
         uses: docker/build-push-action@v2
         id: docker
-        run: |
-          echo "::set-output name=image::${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}"
         with:
           push: true
           tags: |
