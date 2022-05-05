@@ -8,7 +8,7 @@ on:
 
 env:
   REPO:  ${{ secrets.DOCKER_USER }}/test
-  branch: $(echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3)
+  branch: $echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3
 
 jobs:
   build:
@@ -29,8 +29,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Get branch
+        id: branch
+        shell: bash
+        run: |
+          echo "::set-output name=branch::$echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3"
       - name: Taggin image
-        if: ${{env.branch}} != release
+        if: ${{steps.branch.outputs.branch}} != release
         shell: bash
         id: vars
         run: |
