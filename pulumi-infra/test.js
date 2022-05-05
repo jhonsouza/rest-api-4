@@ -1,0 +1,1 @@
+const n = require("@passeidireto/pd-deploy-task");

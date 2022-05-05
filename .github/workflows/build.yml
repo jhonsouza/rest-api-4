@@ -33,6 +33,7 @@ jobs:
         shell: bash
         id: vars
         run: |
+          echo ${GITHUB_REF##*/}
           echo "::set-output name=tag::$(git rev-parse --short HEAD)"
           echo "::set-output name=author::$(git log -n 1 | grep Author | cut -d: -d' ' -f2,3)"
           git log -n 1 | grep Author | cut -d: -d' ' -f2,3
@@ -54,11 +55,11 @@ jobs:
     #   run:
     #     working-directory: ./pulumi-infra
     steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: jhonsouza/pulumi-infra
-          path: infra
-          token: ${{ secrets.GIT_TOKEN}}
+      # - uses: actions/checkout@v3
+      #   with:
+      #     repository: jhonsouza/pulumi-infra
+      #     path: infra
+      #     token: ${{ secrets.GIT_TOKEN}}
       - uses: actions/setup-node@v2
         with:
           node-version: 14
@@ -73,6 +74,6 @@ jobs:
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         with:
-          command: destroy
+          command: up
           stack-name: dev
-          work-dir: infra
+          work-dir: pulumi-infra

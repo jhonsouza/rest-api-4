@@ -1,2 +1,10 @@
 config:
   aws:region: us-east-2
+  aws:defaultTags:
+    tags:
+      pd:project: payments-api
+      pd:stack: dev
+      pd:iac: pulumi
+      pd:tier: infra
+      pd:owner: monetization
+      pd:repo: https://github.com/passeidireto

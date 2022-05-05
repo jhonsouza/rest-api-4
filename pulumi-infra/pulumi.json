@@ -1,0 +1,856 @@
+{
+    "version": 3,
+    "deployment": {
+        "manifest": {
+            "time": "2022-04-29T11:34:52.5454545-03:00",
+            "magic": "f18625eb5592f6d57a3a8c5bfde984fc0808d71ce3f046fd68e1dc4a989f43a7",
+            "version": "v3.30.0"
+        },
+        "secrets_providers": {
+            "type": "service",
+            "state": {
+                "url": "https://api.pulumi.com",
+                "owner": "jhonsouza",
+                "project": "payments-api",
+                "stack": "dev"
+            }
+        },
+        "resources": [
+            {
+                "urn": "urn:pulumi:dev::payments-api::pulumi:pulumi:Stack::payments-api-dev",
+                "custom": false,
+                "type": "pulumi:pulumi:Stack",
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask::dev-payments",
+                "custom": false,
+                "type": "contrib:components:UpdateTask",
+                "parent": "urn:pulumi:dev::payments-api::pulumi:pulumi:Stack::payments-api-dev",
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_3_0",
+                "custom": true,
+                "id": "d1010a77-86ee-4d8f-92d0-77dda81ccb1a",
+                "type": "pulumi:providers:aws",
+                "inputs": {
+                    "defaultTags": "{\"tags\":{\"pd:iac\":\"pulumi\",\"pd:owner\":\"monetization\",\"pd:project\":\"payments-api\",\"pd:repo\":\"https://github.com/passeidireto\",\"pd:stack\":\"dev\",\"pd:tier\":\"infra\"}}",
+                    "region": "us-east-2",
+                    "version": "5.3.0"
+                },
+                "outputs": {
+                    "defaultTags": "{\"tags\":{\"pd:iac\":\"pulumi\",\"pd:owner\":\"monetization\",\"pd:project\":\"payments-api\",\"pd:repo\":\"https://github.com/passeidireto\",\"pd:stack\":\"dev\",\"pd:tier\":\"infra\"}}",
+                    "region": "us-east-2",
+                    "version": "5.3.0"
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::aws:iam/policy:Policy::test-execution-policy",
+                "custom": true,
+                "id": "arn:aws:iam::261235563718:policy/test-execution-policy",
+                "type": "aws:iam/policy:Policy",
+                "inputs": {
+                    "__defaults": [],
+                    "description": "My test policy",
+                    "name": "test-execution-policy",
+                    "path": "/",
+                    "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ecr:GetAuthorizationToken\",\"ecr:BatchCheckLayerAvailability\",\"ecr:GetDownloadUrlForLayer\",\"ecr:BatchGetImage\",\"logs:CreateLogStream\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}"
+                },
+                "outputs": {
+                    "arn": "arn:aws:iam::261235563718:policy/test-execution-policy",
+                    "description": "My test policy",
+                    "id": "arn:aws:iam::261235563718:policy/test-execution-policy",
+                    "name": "test-execution-policy",
+                    "path": "/",
+                    "policy": "{\"Statement\":[{\"Action\":[\"ecr:GetAuthorizationToken\",\"ecr:BatchCheckLayerAvailability\",\"ecr:GetDownloadUrlForLayer\",\"ecr:BatchGetImage\",\"logs:CreateLogStream\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}",
+                    "policyId": "ANPATZUW2LTDEZQMLY4ST",
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    }
+                },
+                "parent": "urn:pulumi:dev::payments-api::pulumi:pulumi:Stack::payments-api-dev",
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_3_0::d1010a77-86ee-4d8f-92d0-77dda81ccb1a",
+                "propertyDependencies": {
+                    "description": null,
+                    "name": null,
+                    "path": null,
+                    "policy": null
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::aws:iam/role:Role::test-execution-role",
+                "custom": true,
+                "id": "test-execution-policy",
+                "type": "aws:iam/role:Role",
+                "inputs": {
+                    "__defaults": [
+                        "forceDetachPolicies",
+                        "maxSessionDuration",
+                        "path"
+                    ],
+                    "assumeRolePolicy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"}}]}",
+                    "forceDetachPolicies": false,
+                    "maxSessionDuration": 3600,
+                    "name": "test-execution-policy",
+                    "path": "/"
+                },
+                "outputs": {
+                    "arn": "arn:aws:iam::261235563718:role/test-execution-policy",
+                    "assumeRolePolicy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}",
+                    "createDate": "2022-04-29T13:47:27Z",
+                    "description": "",
+                    "forceDetachPolicies": false,
+                    "id": "test-execution-policy",
+                    "inlinePolicies": [
+                        {
+                            "name": "",
+                            "policy": ""
+                        }
+                    ],
+                    "managedPolicyArns": [],
+                    "maxSessionDuration": 3600,
+                    "name": "test-execution-policy",
+                    "namePrefix": "",
+                    "path": "/",
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    },
+                    "uniqueId": "AROATZUW2LTDCZVYH26H4"
+                },
+                "parent": "urn:pulumi:dev::payments-api::pulumi:pulumi:Stack::payments-api-dev",
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_3_0::d1010a77-86ee-4d8f-92d0-77dda81ccb1a",
+                "propertyDependencies": {
+                    "assumeRolePolicy": null,
+                    "name": null
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0",
+                "custom": true,
+                "id": "6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "type": "pulumi:providers:aws",
+                "inputs": {
+                    "defaultTags": "{\"tags\":{\"pd:iac\":\"pulumi\",\"pd:owner\":\"monetization\",\"pd:project\":\"payments-api\",\"pd:repo\":\"https://github.com/passeidireto\",\"pd:stack\":\"dev\",\"pd:tier\":\"infra\"}}",
+                    "region": "us-east-2",
+                    "version": "5.2.0"
+                },
+                "outputs": {
+                    "defaultTags": "{\"tags\":{\"pd:iac\":\"pulumi\",\"pd:owner\":\"monetization\",\"pd:project\":\"payments-api\",\"pd:repo\":\"https://github.com/passeidireto\",\"pd:stack\":\"dev\",\"pd:tier\":\"infra\"}}",
+                    "region": "us-east-2",
+                    "version": "5.2.0"
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:cloudwatch/logGroup:LogGroup::/custom/execution-logs/payments-api-dev-payments",
+                "custom": true,
+                "id": "/custom/execution-logs/payments-api-dev-payments",
+                "type": "aws:cloudwatch/logGroup:LogGroup",
+                "inputs": {
+                    "__defaults": [],
+                    "name": "/custom/execution-logs/payments-api-dev-payments",
+                    "retentionInDays": 180
+                },
+                "outputs": {
+                    "arn": "arn:aws:logs:us-east-2:261235563718:log-group:/custom/execution-logs/payments-api-dev-payments",
+                    "id": "/custom/execution-logs/payments-api-dev-payments",
+                    "kmsKeyId": "",
+                    "name": "/custom/execution-logs/payments-api-dev-payments",
+                    "retentionInDays": 180,
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    }
+                },
+                "parent": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask::dev-payments",
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "name": null,
+                    "retentionInDays": null
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:alb/targetGroup:TargetGroup::dev-payments-target",
+                "custom": true,
+                "id": "arn:aws:elasticloadbalancing:us-east-2:261235563718:targetgroup/dev-payments-target/3256fb2d09269d44",
+                "type": "aws:alb/targetGroup:TargetGroup",
+                "inputs": {
+                    "__defaults": [
+                        "connectionTermination",
+                        "deregistrationDelay",
+                        "lambdaMultiValueHeadersEnabled",
+                        "proxyProtocolV2",
+                        "slowStart"
+                    ],
+                    "connectionTermination": false,
+                    "deregistrationDelay": 300,
+                    "healthCheck": {
+                        "__defaults": [
+                            "enabled",
+                            "port",
+                            "unhealthyThreshold"
+                        ],
+                        "enabled": true,
+                        "healthyThreshold": 2,
+                        "interval": 5,
+                        "matcher": "200",
+                        "path": "/posts",
+                        "port": "traffic-port",
+                        "protocol": "HTTP",
+                        "timeout": 2,
+                        "unhealthyThreshold": 3
+                    },
+                    "lambdaMultiValueHeadersEnabled": false,
+                    "name": "dev-payments-target",
+                    "port": 3000,
+                    "protocol": "HTTP",
+                    "proxyProtocolV2": false,
+                    "slowStart": 0,
+                    "targetType": "instance",
+                    "vpcId": "vpc-de9a33b5"
+                },
+                "outputs": {
+                    "arn": "arn:aws:elasticloadbalancing:us-east-2:261235563718:targetgroup/dev-payments-target/3256fb2d09269d44",
+                    "arnSuffix": "targetgroup/dev-payments-target/3256fb2d09269d44",
+                    "connectionTermination": false,
+                    "deregistrationDelay": 300,
+                    "healthCheck": {
+                        "enabled": true,
+                        "healthyThreshold": 2,
+                        "interval": 5,
+                        "matcher": "200",
+                        "path": "/posts",
+                        "port": "traffic-port",
+                        "protocol": "HTTP",
+                        "timeout": 2,
+                        "unhealthyThreshold": 3
+                    },
+                    "id": "arn:aws:elasticloadbalancing:us-east-2:261235563718:targetgroup/dev-payments-target/3256fb2d09269d44",
+                    "lambdaMultiValueHeadersEnabled": false,
+                    "loadBalancingAlgorithmType": "round_robin",
+                    "name": "dev-payments-target",
+                    "port": 3000,
+                    "protocol": "HTTP",
+                    "protocolVersion": "HTTP1",
+                    "proxyProtocolV2": false,
+                    "slowStart": 0,
+                    "stickiness": {
+                        "cookieDuration": 86400,
+                        "cookieName": "",
+                        "enabled": false,
+                        "type": "lb_cookie"
+                    },
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    },
+                    "targetType": "instance",
+                    "vpcId": "vpc-de9a33b5"
+                },
+                "parent": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask::dev-payments",
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "healthCheck": null,
+                    "name": null,
+                    "port": null,
+                    "protocol": null,
+                    "targetType": null,
+                    "vpcId": null
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::aws:iam/policyAttachment:PolicyAttachment::test/pa",
+                "custom": true,
+                "id": "test/pa-233b031",
+                "type": "aws:iam/policyAttachment:PolicyAttachment",
+                "inputs": {
+                    "__defaults": [
+                        "name"
+                    ],
+                    "name": "test/pa-233b031",
+                    "policyArn": "arn:aws:iam::261235563718:policy/test-execution-policy",
+                    "roles": [
+                        "test-execution-policy"
+                    ]
+                },
+                "outputs": {
+                    "groups": [],
+                    "id": "test/pa-233b031",
+                    "name": "test/pa-233b031",
+                    "policyArn": "arn:aws:iam::261235563718:policy/test-execution-policy",
+                    "roles": [
+                        "test-execution-policy"
+                    ],
+                    "users": []
+                },
+                "parent": "urn:pulumi:dev::payments-api::pulumi:pulumi:Stack::payments-api-dev",
+                "dependencies": [
+                    "urn:pulumi:dev::payments-api::aws:iam/policy:Policy::test-execution-policy",
+                    "urn:pulumi:dev::payments-api::aws:iam/role:Role::test-execution-role"
+                ],
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_3_0::d1010a77-86ee-4d8f-92d0-77dda81ccb1a",
+                "propertyDependencies": {
+                    "policyArn": [
+                        "urn:pulumi:dev::payments-api::aws:iam/policy:Policy::test-execution-policy"
+                    ],
+                    "roles": [
+                        "urn:pulumi:dev::payments-api::aws:iam/role:Role::test-execution-role"
+                    ]
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:alb/listenerRule:ListenerRule::payments-api-dev-payments",
+                "custom": true,
+                "id": "arn:aws:elasticloadbalancing:us-east-2:261235563718:listener-rule/app/lb-web-cadastro/f46423507f113ac8/5ca1cb298c2775c9/1c1ba129ad64f0f0",
+                "type": "aws:alb/listenerRule:ListenerRule",
+                "inputs": {
+                    "__defaults": [],
+                    "actions": [
+                        {
+                            "__defaults": [],
+                            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-2:261235563718:targetgroup/dev-payments-target/3256fb2d09269d44",
+                            "type": "forward"
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "__defaults": [],
+                            "hostHeader": {
+                                "__defaults": [],
+                                "values": [
+                                    "test.pd-sandbox.com"
+                                ]
+                            }
+                        },
+                        {
+                            "__defaults": [],
+                            "pathPattern": {
+                                "__defaults": [],
+                                "values": [
+                                    "/posts"
+                                ]
+                            }
+                        }
+                    ],
+                    "listenerArn": "arn:aws:elasticloadbalancing:us-east-2:261235563718:listener/app/lb-web-cadastro/f46423507f113ac8/5ca1cb298c2775c9"
+                },
+                "outputs": {
+                    "actions": [
+                        {
+                            "authenticateCognito": null,
+                            "authenticateOidc": null,
+                            "fixedResponse": null,
+                            "forward": null,
+                            "order": 1,
+                            "redirect": null,
+                            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-2:261235563718:targetgroup/dev-payments-target/3256fb2d09269d44",
+                            "type": "forward"
+                        }
+                    ],
+                    "arn": "arn:aws:elasticloadbalancing:us-east-2:261235563718:listener-rule/app/lb-web-cadastro/f46423507f113ac8/5ca1cb298c2775c9/1c1ba129ad64f0f0",
+                    "conditions": [
+                        {
+                            "hostHeader": null,
+                            "httpHeader": null,
+                            "httpRequestMethod": null,
+                            "pathPattern": {
+                                "values": [
+                                    "/posts"
+                                ]
+                            },
+                            "queryStrings": [],
+                            "sourceIp": null
+                        },
+                        {
+                            "hostHeader": {
+                                "values": [
+                                    "test.pd-sandbox.com"
+                                ]
+                            },
+                            "httpHeader": null,
+                            "httpRequestMethod": null,
+                            "pathPattern": null,
+                            "queryStrings": [],
+                            "sourceIp": null
+                        }
+                    ],
+                    "id": "arn:aws:elasticloadbalancing:us-east-2:261235563718:listener-rule/app/lb-web-cadastro/f46423507f113ac8/5ca1cb298c2775c9/1c1ba129ad64f0f0",
+                    "listenerArn": "arn:aws:elasticloadbalancing:us-east-2:261235563718:listener/app/lb-web-cadastro/f46423507f113ac8/5ca1cb298c2775c9",
+                    "priority": 1,
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    }
+                },
+                "parent": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask::dev-payments",
+                "dependencies": [
+                    "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:alb/targetGroup:TargetGroup::dev-payments-target"
+                ],
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "actions": [
+                        "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:alb/targetGroup:TargetGroup::dev-payments-target"
+                    ],
+                    "conditions": null,
+                    "listenerArn": null
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:ecs/taskDefinition:TaskDefinition::payments-api-dev-payments",
+                "custom": true,
+                "id": "payments-api-dev-payments",
+                "type": "aws:ecs/taskDefinition:TaskDefinition",
+                "inputs": {
+                    "__defaults": [
+                        "skipDestroy"
+                    ],
+                    "containerDefinitions": "[{\"name\":\"payments-api-dev-payments\",\"image\":\"jhonatans/test:latest\",\"cpu\":128,\"memory\":4096,\"memoryReservation\":256,\"networkMode\":\"bridge\",\"hostname\":\"payments-api-dev-payments\",\"portMappings\":[{\"containerPort\":3000,\"hostPort\":80}],\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/custom/execution-logs/payments-api-dev-payments\",\"awslogs-region\":\"us-east-2\"}},\"environment\":[{\"name\":\"test\",\"value\":\"test\"}]}]",
+                    "family": "payments-api-dev-payments",
+                    "skipDestroy": false,
+                    "taskRoleArn": "arn:aws:iam::261235563718:role/test-execution-policy"
+                },
+                "outputs": {
+                    "__meta": "{\"schema_version\":\"1\"}",
+                    "arn": "arn:aws:ecs:us-east-2:261235563718:task-definition/payments-api-dev-payments:4",
+                    "containerDefinitions": "[{\"cpu\":128,\"environment\":[{\"name\":\"test\",\"value\":\"test\"}],\"essential\":true,\"hostname\":\"payments-api-dev-payments\",\"image\":\"jhonatans/test:latest\",\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/custom/execution-logs/payments-api-dev-payments\",\"awslogs-region\":\"us-east-2\"}},\"memory\":4096,\"memoryReservation\":256,\"mountPoints\":[],\"name\":\"payments-api-dev-payments\",\"portMappings\":[{\"containerPort\":3000,\"hostPort\":80,\"protocol\":\"tcp\"}],\"volumesFrom\":[]}]",
+                    "cpu": "",
+                    "ephemeralStorage": null,
+                    "executionRoleArn": "",
+                    "family": "payments-api-dev-payments",
+                    "id": "payments-api-dev-payments",
+                    "inferenceAccelerators": [],
+                    "ipcMode": "",
+                    "memory": "",
+                    "networkMode": "",
+                    "pidMode": "",
+                    "placementConstraints": [],
+                    "proxyConfiguration": null,
+                    "requiresCompatibilities": [],
+                    "revision": 4,
+                    "runtimePlatform": null,
+                    "skipDestroy": false,
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    },
+                    "taskRoleArn": "arn:aws:iam::261235563718:role/test-execution-policy",
+                    "volumes": []
+                },
+                "parent": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask::dev-payments",
+                "dependencies": [
+                    "urn:pulumi:dev::payments-api::aws:iam/role:Role::test-execution-role"
+                ],
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "containerDefinitions": null,
+                    "family": null,
+                    "taskRoleArn": [
+                        "urn:pulumi:dev::payments-api::aws:iam/role:Role::test-execution-role"
+                    ]
+                },
+                "sequenceNumber": 2
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:appautoscaling/target:Target::payments-api-dev-payments",
+                "custom": true,
+                "id": "service/default/payments-api-dev-payments",
+                "type": "aws:appautoscaling/target:Target",
+                "inputs": {
+                    "__defaults": [],
+                    "maxCapacity": 6,
+                    "minCapacity": 1,
+                    "resourceId": "service/default/payments-api-dev-payments",
+                    "scalableDimension": "ecs:service:DesiredCount",
+                    "serviceNamespace": "ecs"
+                },
+                "outputs": {
+                    "id": "service/default/payments-api-dev-payments",
+                    "maxCapacity": 6,
+                    "minCapacity": 1,
+                    "resourceId": "service/default/payments-api-dev-payments",
+                    "roleArn": "arn:aws:iam::261235563718:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+                    "scalableDimension": "ecs:service:DesiredCount",
+                    "serviceNamespace": "ecs"
+                },
+                "parent": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask::dev-payments",
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "maxCapacity": null,
+                    "minCapacity": null,
+                    "resourceId": null,
+                    "scalableDimension": null,
+                    "serviceNamespace": null
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:ecs/service:Service::payments-api-dev-payments",
+                "custom": true,
+                "id": "arn:aws:ecs:us-east-2:261235563718:service/default/payments-api-dev-payments",
+                "type": "aws:ecs/service:Service",
+                "inputs": {
+                    "__defaults": [
+                        "enableEcsManagedTags",
+                        "enableExecuteCommand",
+                        "schedulingStrategy",
+                        "waitForSteadyState"
+                    ],
+                    "cluster": "arn:aws:ecs:us-east-2:261235563718:cluster/default",
+                    "deploymentCircuitBreaker": {
+                        "__defaults": [],
+                        "enable": true,
+                        "rollback": true
+                    },
+                    "deploymentMaximumPercent": 200,
+                    "deploymentMinimumHealthyPercent": 100,
+                    "enableEcsManagedTags": false,
+                    "enableExecuteCommand": false,
+                    "healthCheckGracePeriodSeconds": 120,
+                    "loadBalancers": [
+                        {
+                            "__defaults": [],
+                            "containerName": "payments-api-dev-payments",
+                            "containerPort": 3000,
+                            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-2:261235563718:targetgroup/dev-payments-target/3256fb2d09269d44"
+                        }
+                    ],
+                    "name": "payments-api-dev-payments",
+                    "orderedPlacementStrategies": [
+                        {
+                            "__defaults": [],
+                            "field": "attribute:ecs.availability-zone",
+                            "type": "spread"
+                        }
+                    ],
+                    "schedulingStrategy": "REPLICA",
+                    "taskDefinition": "arn:aws:ecs:us-east-2:261235563718:task-definition/payments-api-dev-payments:4",
+                    "waitForSteadyState": false
+                },
+                "outputs": {
+                    "__meta": "{\"e2bfb730-ecaa-11e6-8f88-34363bc7c4c0\":{\"delete\":1200000000000}}",
+                    "capacityProviderStrategies": [],
+                    "cluster": "arn:aws:ecs:us-east-2:261235563718:cluster/default",
+                    "deploymentCircuitBreaker": {
+                        "enable": true,
+                        "rollback": true
+                    },
+                    "deploymentController": {
+                        "type": "ECS"
+                    },
+                    "deploymentMaximumPercent": 200,
+                    "deploymentMinimumHealthyPercent": 100,
+                    "desiredCount": 0,
+                    "enableEcsManagedTags": false,
+                    "enableExecuteCommand": false,
+                    "healthCheckGracePeriodSeconds": 120,
+                    "iamRole": "aws-service-role",
+                    "id": "arn:aws:ecs:us-east-2:261235563718:service/default/payments-api-dev-payments",
+                    "launchType": "EC2",
+                    "loadBalancers": [
+                        {
+                            "containerName": "payments-api-dev-payments",
+                            "containerPort": 3000,
+                            "elbName": "",
+                            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-2:261235563718:targetgroup/dev-payments-target/3256fb2d09269d44"
+                        }
+                    ],
+                    "name": "payments-api-dev-payments",
+                    "networkConfiguration": null,
+                    "orderedPlacementStrategies": [
+                        {
+                            "field": "attribute:ecs.availability-zone",
+                            "type": "spread"
+                        }
+                    ],
+                    "placementConstraints": [],
+                    "platformVersion": "",
+                    "propagateTags": "NONE",
+                    "schedulingStrategy": "REPLICA",
+                    "serviceRegistries": null,
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    },
+                    "taskDefinition": "arn:aws:ecs:us-east-2:261235563718:task-definition/payments-api-dev-payments:4",
+                    "waitForSteadyState": false
+                },
+                "parent": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask::dev-payments",
+                "dependencies": [
+                    "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:alb/targetGroup:TargetGroup::dev-payments-target",
+                    "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:ecs/taskDefinition:TaskDefinition::payments-api-dev-payments"
+                ],
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "cluster": null,
+                    "deploymentCircuitBreaker": null,
+                    "deploymentMaximumPercent": null,
+                    "deploymentMinimumHealthyPercent": null,
+                    "healthCheckGracePeriodSeconds": null,
+                    "loadBalancers": [
+                        "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:alb/targetGroup:TargetGroup::dev-payments-target"
+                    ],
+                    "name": null,
+                    "orderedPlacementStrategies": null,
+                    "taskDefinition": [
+                        "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:ecs/taskDefinition:TaskDefinition::payments-api-dev-payments"
+                    ]
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:ecs/taskDefinition:TaskDefinition::payments-api-dev-payments",
+                "custom": true,
+                "delete": true,
+                "id": "payments-api-dev-payments",
+                "type": "aws:ecs/taskDefinition:TaskDefinition",
+                "inputs": {
+                    "__defaults": [
+                        "skipDestroy"
+                    ],
+                    "containerDefinitions": "[{\"name\":\"payments-api-dev-payments\",\"image\":\"jhonatans/test:latest\",\"cpu\":128,\"memory\":4096,\"memoryReservation\":256,\"networkMode\":\"bridge\",\"hostname\":\"payments-api-dev-payments\",\"portMapping\":[{\"containerPort\":3000,\"hostPort\":0}],\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/custom/execution-logs/payments-api-dev-payments\",\"awslogs-region\":\"us-east-2\"}},\"environment\":[{\"name\":\"test\",\"value\":\"test\"}]}]",
+                    "family": "payments-api-dev-payments",
+                    "skipDestroy": false,
+                    "taskRoleArn": "arn:aws:iam::261235563718:role/test-execution-policy"
+                },
+                "outputs": {
+                    "__meta": "{\"schema_version\":\"1\"}",
+                    "arn": "arn:aws:ecs:us-east-2:261235563718:task-definition/payments-api-dev-payments:3",
+                    "containerDefinitions": "[{\"cpu\":128,\"environment\":[{\"name\":\"test\",\"value\":\"test\"}],\"essential\":true,\"hostname\":\"payments-api-dev-payments\",\"image\":\"jhonatans/test:latest\",\"logConfiguration\":{\"logDriver\":\"awslogs\",\"options\":{\"awslogs-group\":\"/custom/execution-logs/payments-api-dev-payments\",\"awslogs-region\":\"us-east-2\"}},\"memory\":4096,\"memoryReservation\":256,\"mountPoints\":[],\"name\":\"payments-api-dev-payments\",\"portMappings\":[],\"volumesFrom\":[]}]",
+                    "cpu": "",
+                    "ephemeralStorage": null,
+                    "executionRoleArn": "",
+                    "family": "payments-api-dev-payments",
+                    "id": "payments-api-dev-payments",
+                    "inferenceAccelerators": [],
+                    "ipcMode": "",
+                    "memory": "",
+                    "networkMode": "",
+                    "pidMode": "",
+                    "placementConstraints": [],
+                    "proxyConfiguration": null,
+                    "requiresCompatibilities": [],
+                    "revision": 3,
+                    "runtimePlatform": null,
+                    "skipDestroy": false,
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    },
+                    "taskRoleArn": "arn:aws:iam::261235563718:role/test-execution-policy",
+                    "volumes": []
+                },
+                "parent": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask::dev-payments",
+                "dependencies": [
+                    "urn:pulumi:dev::payments-api::aws:iam/role:Role::test-execution-role"
+                ],
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "containerDefinitions": null,
+                    "family": null,
+                    "taskRoleArn": [
+                        "urn:pulumi:dev::payments-api::aws:iam/role:Role::test-execution-role"
+                    ]
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::aws:iam/policy:Policy::payments-api-dev-payments-execution-policy",
+                "custom": true,
+                "id": "arn:aws:iam::261235563718:policy/payments-api-dev-payments-execution-policy",
+                "type": "aws:iam/policy:Policy",
+                "inputs": {
+                    "__defaults": [],
+                    "description": "My test policy",
+                    "name": "payments-api-dev-payments-execution-policy",
+                    "path": "/",
+                    "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"ecr:GetAuthorizationToken\",\"ecr:BatchCheckLayerAvailability\",\"ecr:GetDownloadUrlForLayer\",\"ecr:BatchGetImage\",\"ec2:AuthorizeSecurityGroupIngress\",\"ec2:Describe*\",\"elasticloadbalancing:DeregisterInstancesFromLoadBalancer\",\"elasticloadbalancing:DeregisterTargets\",\"elasticloadbalancing:Describe*\",\"elasticloadbalancing:RegisterInstancesWithLoadBalancer\",\"elasticloadbalancing:RegisterTargets\",\"logs:CreateLogStream\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}]}"
+                },
+                "outputs": {
+                    "arn": "arn:aws:iam::261235563718:policy/payments-api-dev-payments-execution-policy",
+                    "description": "My test policy",
+                    "id": "arn:aws:iam::261235563718:policy/payments-api-dev-payments-execution-policy",
+                    "name": "payments-api-dev-payments-execution-policy",
+                    "path": "/",
+                    "policy": "{\"Statement\":[{\"Action\":[\"ecr:GetAuthorizationToken\",\"ecr:BatchCheckLayerAvailability\",\"ecr:GetDownloadUrlForLayer\",\"ecr:BatchGetImage\",\"ec2:AuthorizeSecurityGroupIngress\",\"ec2:Describe*\",\"elasticloadbalancing:DeregisterInstancesFromLoadBalancer\",\"elasticloadbalancing:DeregisterTargets\",\"elasticloadbalancing:Describe*\",\"elasticloadbalancing:RegisterInstancesWithLoadBalancer\",\"elasticloadbalancing:RegisterTargets\",\"logs:CreateLogStream\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}",
+                    "policyId": "ANPATZUW2LTDBR36OGFBU",
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    }
+                },
+                "parent": "urn:pulumi:dev::payments-api::pulumi:pulumi:Stack::payments-api-dev",
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "description": null,
+                    "name": null,
+                    "path": null,
+                    "policy": null
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:iam/role:Role::payments-api-dev-payments-execution-role",
+                "custom": true,
+                "id": "payments-api-dev-payments-execution-role",
+                "type": "aws:iam/role:Role",
+                "inputs": {
+                    "__defaults": [
+                        "forceDetachPolicies",
+                        "maxSessionDuration",
+                        "path"
+                    ],
+                    "assumeRolePolicy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"}}]}",
+                    "forceDetachPolicies": false,
+                    "managedPolicyArns": [
+                        "arn:aws:iam::aws:policy/AdministratorAccess",
+                        "arn:aws:iam::261235563718:policy/payments-api-dev-payments-execution-policy"
+                    ],
+                    "maxSessionDuration": 3600,
+                    "name": "payments-api-dev-payments-execution-role",
+                    "path": "/"
+                },
+                "outputs": {
+                    "arn": "arn:aws:iam::261235563718:role/payments-api-dev-payments-execution-role",
+                    "assumeRolePolicy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}",
+                    "createDate": "2022-04-29T13:47:30Z",
+                    "description": "",
+                    "forceDetachPolicies": false,
+                    "id": "payments-api-dev-payments-execution-role",
+                    "inlinePolicies": [
+                        {
+                            "name": "",
+                            "policy": ""
+                        }
+                    ],
+                    "managedPolicyArns": [
+                        "arn:aws:iam::aws:policy/AdministratorAccess",
+                        "arn:aws:iam::261235563718:policy/payments-api-dev-payments-execution-policy"
+                    ],
+                    "maxSessionDuration": 3600,
+                    "name": "payments-api-dev-payments-execution-role",
+                    "namePrefix": "",
+                    "path": "/",
+                    "tags": {},
+                    "tagsAll": {
+                        "pd:iac": "pulumi",
+                        "pd:owner": "monetization",
+                        "pd:project": "payments-api",
+                        "pd:repo": "https://github.com/passeidireto",
+                        "pd:stack": "dev",
+                        "pd:tier": "infra"
+                    },
+                    "uniqueId": "AROATZUW2LTDFWL3LLMRW"
+                },
+                "parent": "urn:pulumi:dev::payments-api::contrib:components:UpdateTask::dev-payments",
+                "dependencies": [
+                    "urn:pulumi:dev::payments-api::aws:iam/policy:Policy::payments-api-dev-payments-execution-policy"
+                ],
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "assumeRolePolicy": null,
+                    "managedPolicyArns": [
+                        "urn:pulumi:dev::payments-api::aws:iam/policy:Policy::payments-api-dev-payments-execution-policy"
+                    ],
+                    "name": null
+                },
+                "sequenceNumber": 1
+            },
+            {
+                "urn": "urn:pulumi:dev::payments-api::aws:iam/policyAttachment:PolicyAttachment::payments-api-dev-payments/pa",
+                "custom": true,
+                "id": "payments-api-dev-payments/pa-7b1b83d",
+                "type": "aws:iam/policyAttachment:PolicyAttachment",
+                "inputs": {
+                    "__defaults": [
+                        "name"
+                    ],
+                    "name": "payments-api-dev-payments/pa-7b1b83d",
+                    "policyArn": "arn:aws:iam::261235563718:policy/payments-api-dev-payments-execution-policy",
+                    "roles": [
+                        "payments-api-dev-payments-execution-role"
+                    ]
+                },
+                "outputs": {
+                    "groups": [],
+                    "id": "payments-api-dev-payments/pa-7b1b83d",
+                    "name": "payments-api-dev-payments/pa-7b1b83d",
+                    "policyArn": "arn:aws:iam::261235563718:policy/payments-api-dev-payments-execution-policy",
+                    "roles": [
+                        "payments-api-dev-payments-execution-role"
+                    ],
+                    "users": []
+                },
+                "parent": "urn:pulumi:dev::payments-api::pulumi:pulumi:Stack::payments-api-dev",
+                "dependencies": [
+                    "urn:pulumi:dev::payments-api::aws:iam/policy:Policy::payments-api-dev-payments-execution-policy",
+                    "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:iam/role:Role::payments-api-dev-payments-execution-role"
+                ],
+                "provider": "urn:pulumi:dev::payments-api::pulumi:providers:aws::default_5_2_0::6a0343b3-e153-4cc8-b3d6-7ea4082662c2",
+                "propertyDependencies": {
+                    "policyArn": [
+                        "urn:pulumi:dev::payments-api::aws:iam/policy:Policy::payments-api-dev-payments-execution-policy"
+                    ],
+                    "roles": [
+                        "urn:pulumi:dev::payments-api::contrib:components:UpdateTask$aws:iam/role:Role::payments-api-dev-payments-execution-role"
+                    ]
+                },
+                "sequenceNumber": 1
+            }
+        ]
+    }
+}
