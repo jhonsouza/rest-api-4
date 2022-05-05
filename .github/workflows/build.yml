@@ -33,7 +33,7 @@ jobs:
         shell: bash
         id: vars
         run: |
-          echo ${GITHUB_REF##*/}
+          echo ${GITHUB_REF##*/} ${{ github.ref }}
           echo "::set-output name=tag::$(git rev-parse --short HEAD)"
           echo "::set-output name=author::$(git log -n 1 | grep Author | cut -d: -d' ' -f2,3)"
           git log -n 1 | grep Author | cut -d: -d' ' -f2,3
