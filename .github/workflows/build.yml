@@ -33,7 +33,7 @@ jobs:
         id: branch
         shell: bash
         run: |
-          echo "::set-output name=branch::$echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3"
+          echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3)"
       - name: Taggin image
         if: ${{steps.branch.outputs.branch}} != release
         shell: bash
