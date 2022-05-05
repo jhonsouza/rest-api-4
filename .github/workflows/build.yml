@@ -7,8 +7,7 @@ on:
 
 env:
   REPO:  ${{ secrets.DOCKER_USER }}/test
-  
-
+  branch: ${{GITHUB_REF##*/}
 
 jobs:
   build:
@@ -30,7 +29,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Taggin image
-        if: echo ${GITHUB_REF##*/} != release/*
+        if: ${{ github.ref }} != release/*
         shell: bash
         id: vars
         run: |
@@ -48,6 +47,7 @@ jobs:
           push: true
           tags: |
             ${{ env.REPO }}:latest
+            ${{ env.REPO }}:test
             ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
   deploy:
     needs: build
