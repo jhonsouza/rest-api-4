@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Taggin image
-        if: ${GITHUB_REF##*/} != release/*
+        if: echo ${GITHUB_REF##*/} != release/*
         shell: bash
         id: vars
         run: |
