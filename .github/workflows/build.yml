@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - release/*
 
 env:
   REPO:  ${{ secrets.DOCKER_USER }}/test
@@ -29,11 +30,11 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Taggin image
-        if: ${{ github.ref }} != release/*
+        if: ${env.branch} != release/*
         shell: bash
         id: vars
         run: |
-          echo ${GITHUB_REF##*/} ${{ github.ref }}
+          echo ${GITHUB_REF##*/} ${{ github.ref }} ${env.branch}
           echo "::set-output name=tag::$(git rev-parse --short HEAD)"
           echo "::set-output name=author::$(git log -n 1 | grep Author | cut -d: -d' ' -f2,3)"
           git log -n 1 | grep Author | cut -d: -d' ' -f2,3
