@@ -8,7 +8,7 @@ on:
 
 env:
   REPO:  ${{ secrets.DOCKER_USER }}/test
-  branch: echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3
+  branch: $(echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3)
 
 jobs:
   build:
