@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Taggin image
-        if: ${{env.branch}} != release/*
+        if: ${{env.branch}} != 'release/*'
         shell: bash
         id: vars
         run: |
