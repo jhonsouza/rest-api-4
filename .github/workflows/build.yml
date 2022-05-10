@@ -8,7 +8,7 @@ on:
 
 env:
   REPO:  ${{ secrets.DOCKER_USER }}/test
-  branch: ${GITHUB_REF##*/}
+  branch: $echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3
 
 jobs:
   build:
@@ -29,12 +29,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Get branch
+        id: branch
+        shell: bash
+        run: |
+          echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3)"
       - name: Taggin image
-        if: ${{env.branch}} != 'release/*'
+        if: ${{steps.branch.outputs.branch != 'release'}}
         shell: bash
         id: vars
         run: |
-          echo ${GITHUB_REF##/} ${GITHUB_REF#refs/*/} ${{ github.ref }} ${{env.branch}}
+          echo ${{steps.branch.outputs.branch}}
           echo "::set-output name=tag::$(git rev-parse --short HEAD)"
           echo "::set-output name=author::$(git log -n 1 | grep Author | cut -d: -d' ' -f2,3)"
           git log -n 1 | grep Author | cut -d: -d' ' -f2,3
