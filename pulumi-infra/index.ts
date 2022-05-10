@@ -2,45 +2,45 @@ import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
 import PdDeployTask from "@passeidireto/pd-deploy-task";
-const policy = new aws.iam.Policy(`test-execution-policy`, {
-    name: "test-execution-policy",
-    path: '/',
-    description: 'My test policy',
-    policy: JSON.stringify({
-        Version: '2012-10-17',
-        Statement: [
-            {
-                Action: [
-                    'ecr:GetAuthorizationToken',
-                    'ecr:BatchCheckLayerAvailability',
-                    'ecr:GetDownloadUrlForLayer',
-                    'ecr:BatchGetImage',
-                    'logs:CreateLogStream',
-                    'logs:PutLogEvents',
-                ],
-                Effect: 'Allow',
-                Resource: '*',
-            },
-        ],
-    }),
-});
-const taskRoleArn = new aws.iam.Role("test-execution-role", {
-    name: "test-execution-policy",
-    assumeRolePolicy: JSON.stringify({
-        Version: "2012-10-17",
-        Statement: [{
-            Action: "sts:AssumeRole",
-            Effect: "Allow",
-            Principal: {
-                Service: "ecs-tasks.amazonaws.com",
-            },
-        }],
-    }),
-});
-    new aws.iam.PolicyAttachment(`test/pa`, {
-        policyArn: policy.arn,
-        roles: [taskRoleArn.name],
-    });
+// const policy = new aws.iam.Policy(`test-execution-policy`, {
+//     name: "test-execution-policy",
+//     path: '/',
+//     description: 'My test policy',
+//     policy: JSON.stringify({
+//         Version: '2012-10-17',
+//         Statement: [
+//             {
+//                 Action: [
+//                     'ecr:GetAuthorizationToken',
+//                     'ecr:BatchCheckLayerAvailability',
+//                     'ecr:GetDownloadUrlForLayer',
+//                     'ecr:BatchGetImage',
+//                     'logs:CreateLogStream',
+//                     'logs:PutLogEvents',
+//                 ],
+//                 Effect: 'Allow',
+//                 Resource: '*',
+//             },
+//         ],
+//     }),
+// });
+// const taskRoleArn = new aws.iam.Role("test-execution-role", {
+//     name: "test-execution-policy",
+//     assumeRolePolicy: JSON.stringify({
+//         Version: "2012-10-17",
+//         Statement: [{
+//             Action: "sts:AssumeRole",
+//             Effect: "Allow",
+//             Principal: {
+//                 Service: "ecs-tasks.amazonaws.com",
+//             },
+//         }],
+//     }),
+// });
+//     new aws.iam.PolicyAttachment(`test/pa`, {
+//         policyArn: policy.arn,
+//         roles: [taskRoleArn.name],
+//     });
 const hostedZone = pulumi.output(aws.route53.getZone({
     name: "pd-sandbox.com.",
     privateZone: true
@@ -52,6 +52,14 @@ const dnsRecord = new aws.route53.Record("test.pd-sandbox.com",{
     records: ["lb-web-cadastro-42593753.us-east-2.elb.amazonaws.com"],
     ttl: 300
 })
+const loadBalancer = aws.alb.getLoadBalancer({
+    name: "lb-web-cadastro"
+});
+
+const listenerArn = loadBalancer.then(loadBalancer => aws.alb.getListener({
+    loadBalancerArn: loadBalancer.arn,
+    port: 8089
+}))
 const pdTaskDeploy = new PdDeployTask(`${pulumi.getStack()}`,{
     clusterName: "default",
     cname: "test.pd-sandbox.com",
@@ -61,7 +69,7 @@ const pdTaskDeploy = new PdDeployTask(`${pulumi.getStack()}`,{
     evaluationPeriods: 60,
     evaluationPeriodsDown: 180,
     healthCheckPath: "/posts",
-    listenerArn: "arn:aws:elasticloadbalancing:us-east-2:261235563718:listener/app/lb-web-cadastro/f46423507f113ac8/5ca1cb298c2775c9",
+    listenerArn: listenerArn.then(listenerArn => listenerArn.arn),
     maxCapacity: 6,
     minCapacity: 1,
     metricAggregationType: "Average",
@@ -72,7 +80,7 @@ const pdTaskDeploy = new PdDeployTask(`${pulumi.getStack()}`,{
     scalingAdjustment: 1,
     scalingAdjustmentDown: -1,
     statistic: "Average",
-    taskRoleArn: taskRoleArn.arn,
+    taskRoleArn: "",
     threshold: 30,
     unit: "Percent",
     vpcId: "vpc-de9a33b5",
