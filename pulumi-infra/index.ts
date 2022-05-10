@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
-import PdDeployTask from "@passeidireto/pd-deploy-task";
+import PdDeployTask from "./modules/common/pd-task-deploy/pd-task-deploy";
 const policy = new aws.iam.Policy(`test-execution-policy`, {
     name: "test-execution-policy",
     path: '/',
