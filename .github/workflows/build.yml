@@ -5,11 +5,6 @@ on:
     branches:
       - 'main'
       - release/*
-jobs:
-  job0:
-    - name: job0
-      outputs:
-        job-status: ${{ job.status }}
 
 env:
   REPO:  ${{ secrets.DOCKER_USER }}/test
