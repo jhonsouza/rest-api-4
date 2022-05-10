@@ -1,14 +1,12 @@
 name: Build
-
 on:
   push:
     branches:
-      - main
+      - 'main'
       - release/*
 
 env:
   REPO:  ${{ secrets.DOCKER_USER }}/test
-  branch: echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3
 
 jobs:
   build:
@@ -55,19 +53,6 @@ jobs:
             ${{ env.REPO }}:latest
             ${{ env.REPO }}:test
             ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
-      - name: job status output
-        outputs:
-          - jobStatus: ${{job.staus}}
-
-
-  pre-deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: check status
-        run: |
-          echo ${{ needs.build.outputs.jobStatus}}
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
