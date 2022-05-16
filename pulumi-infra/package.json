@@ -1,9 +1,7 @@
 {
     "name": "monetization_infra",
     "devDependencies": {
-        "@types/node": "^14",
-        "@passeidireto/pd-deploy-task": "/home/jhonatan/projects/iac-monetization"
-        
+        "@types/node": "^14"
     },
     "dependencies": {
         "@pulumi/pulumi": "^3.0.0",
