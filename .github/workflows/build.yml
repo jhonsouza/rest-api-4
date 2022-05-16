@@ -53,27 +53,10 @@ jobs:
             ${{ env.REPO }}:latest
             ${{ env.REPO }}:test
             ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
-<<<<<<< HEAD
-      - name: job status output
-        outputs:
-          - jobStatus: ${{job.staus}}
-
-
-  pre-deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: check status
-        run: |
-          echo ${{ needs.build.outputs.jobStatus}}
-
-  deploy:
-=======
     outputs: 
       jobStatus: ${{job.status}}
 
   pre-deploy:
->>>>>>> c3410ff9adae44744c532b37ba72e670c8faea02
     needs: build
     runs-on: ubuntu-latest
     steps:
