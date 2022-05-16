@@ -2,7 +2,7 @@ name: pulumi
 
 on:
   workflow_run:
-    workflows: [build]
+    workflows: [Build]
     types:
       - completed
 
