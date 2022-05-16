@@ -4,10 +4,10 @@ on:
   workflow_run:
     workflows: [Build]
     types:
-      - completed
+      - [completed,requested]
     branches:
       - 'main'
-      
+
 
 jobs:
   deploy:
