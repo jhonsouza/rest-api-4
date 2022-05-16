@@ -52,7 +52,6 @@ jobs:
           tags: |
             ${{ env.REPO }}:latest
             ${{ env.REPO }}:test
-            ${{ secrets.DOCKER_USER }}/test:${{ steps.vars.outputs.tag }}
     outputs: 
       jobStatus: ${{job.status}}
 
