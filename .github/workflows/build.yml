@@ -1,4 +1,4 @@
-name: Build
+name: Build build
 on:
   push:
     branches:
@@ -54,11 +54,3 @@ jobs:
             ${{ env.REPO }}:test
     outputs: 
       jobStatus: ${{job.status}}
-
-  pre-deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: job status value
-        run: |
-          echo ${{ needs.build.outputs.jobStatus}}
