@@ -7,4 +7,4 @@ config:
       pd:iac: pulumi
       pd:tier: infra
       pd:owner: monetization
-      pd:repo: https://github.com/passeidireto
+      pd:repo: https://github.com/PasseiDireto/payments-api
