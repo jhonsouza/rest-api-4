@@ -12,8 +12,11 @@ jobs:
       - name: clone repo
         id: clone
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - run: |
-          git checkout $(git tag -l | sort -n | tail -1)          
+          echo $(git tag -l | sort -n | tail -1)
+          git checkout $(git tag -l | sort -n | tail -1)
       - name: Build Image
         id: buildx
         uses: docker/setup-buildx-action@v1
