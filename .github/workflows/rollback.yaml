@@ -12,7 +12,7 @@ jobs:
       - name: clone repo
         id: clone
         uses: actions/checkout@v2
-        run: |
+      - run: |
           git checkout $(git tag -l | sort -n | tail -1)          
       - name: Build Image
         id: buildx
