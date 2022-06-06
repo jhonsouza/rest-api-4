@@ -1,0 +1,26 @@
+name: Merge back in develop
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'branch to merge in develop'
+
+jobs:
+  merge-back:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ branch }}
+          fetch-depth: 0
+      - name: Create PR
+        id: open-pr
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: develop
+          github_token: ${{ secrets.GIT_TOKEN }}
+          pr_title: "[AUTOMATED] Auto-merge ${{ branch }} into develop"
+          pr_body: "Automated Pull Request"
+          pr_assignee: $GITHUB_ACTOR
