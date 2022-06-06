@@ -1,1 +1,5 @@
 .docker
+.github
+.git
+.gitignore
+pulumi*
