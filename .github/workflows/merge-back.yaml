@@ -25,3 +25,10 @@ jobs:
           pr_title: "[AUTOMATED] Auto-merge ${{ github.event.inputs.branch }} into develop"
           pr_body: "Automated Pull Request"
           pr_assignee: $GITHUB_ACTOR
+      - name: auto merge
+        if: steps.open-pr.outputs.pr_number != ''
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          pull-request-number: ${{ steps.open-pr.outputs.pr_number }}
+          
