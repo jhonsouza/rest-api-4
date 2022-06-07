@@ -17,25 +17,30 @@ jobs:
       #     ref: ${{ github.event.inputs.branch }}
       #     fetch-depth: 0
       - run: |
+          echo '#========= Configure SSH =========#'
           eval `ssh-agent -s`
           echo ${{ secrets.GIT_KEY }} > gitactions
-          ls -la
-          sudo su
           chmod 600 gitactions
           ssh-add gitactions
           rm gitactions
+          echo '#=================================#'
+          echo '#========= Clone Repo =========#'
           git clone git@github.com:jhonsouza/rest-api-4.git .
           git fetch git@github.com:jhonsouza/rest-api-4.git
           git checkout -B ${{ github.event.inputs.target_branch }}; git checkout -B ${{ github.event.inputs.target_branch }} refs/remotes/origin/${{ github.event.inputs.target_branch }}
+          echo '#=================================#'
+          echo '#========= Configure git =========#'
           git config push.default simple
           git config user.email "jhonatan.siqueira@passeidireto.com"
           git config user.name "jhonatan siqueira"
-          git merge remotes/origin/${{ github.event.inputs.branch }} --no-off --no-commit
+          echo '#=================================#'
+          git merge remotes/origin/${{ github.event.inputs.branch }} --no-ff --no-commit
 
-          # check if package.json exists and ignore
+          echo '#===== check if package.json exists and ignore ====#'
           [ -f package.json ] && git reset HEAD package.json || echo "package.json doesn't exist"
           [ -f package.json ] && git checkout -- package.json || echo "package.json doesn't exist"
 
+          echo '#============ Auto merge ===============#'
           git commit -m "Auto-merge" --allow-empty
           git push git@github.com:jhonsouza/rest-api-4.git ${{ github.event.inputs.target_branch }}:${{ github.event.inputs.target_branch }}
           ssh-agent -k
