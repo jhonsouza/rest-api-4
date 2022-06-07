@@ -20,8 +20,8 @@ jobs:
           eval `ssh-agent -s`
           echo ${{ secrets.GIT_KEY }} > gitactions.pub
           ls -la
+          sudo su
           chmod 0644 gitactions.pub
-          ls -la
           ssh-add gitactions.pub
           git clone git@github.com:jhonsouza/rest-api-4.git .
           git fetch git@github.com:jhonsouza/rest-api-4.git
