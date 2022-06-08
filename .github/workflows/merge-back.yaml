@@ -11,36 +11,32 @@ jobs:
   merge-back:
     runs-on: ubuntu-latest
     steps:
-      # - name: Clone Repo
-      #   uses: actions/checkout@v3
-      #   with:
-      #     ref: ${{ github.event.inputs.branch }}
-      #     fetch-depth: 0
-      - run: |
-          echo '#========= Configure SSH =========#'
+      - name: Configure SSH 
+        run: |
           eval `ssh-agent -s`
           echo ${{ secrets.GIT_KEY }} > gitactions
           chmod 600 gitactions
           ssh-add gitactions
           rm gitactions
-          echo '#=================================#'
-          echo '#========= Clone Repo =========#'
+      - name: Clone Repo
+        run: |
           git clone git@github.com:jhonsouza/rest-api-4.git .
           git fetch git@github.com:jhonsouza/rest-api-4.git
           git checkout -B ${{ github.event.inputs.target_branch }}; git checkout -B ${{ github.event.inputs.target_branch }} refs/remotes/origin/${{ github.event.inputs.target_branch }}
-          echo '#=================================#'
-          echo '#========= Configure git =========#'
+      - name: Configure git
+        run: |
           git config push.default simple
           git config user.email "jhonatan.siqueira@passeidireto.com"
           git config user.name "jhonatan siqueira"
-          echo '#=================================#'
           git merge remotes/origin/${{ github.event.inputs.branch }} --no-ff --no-commit
-
-          echo '#===== check if package.json exists and ignore ====#'
+      - name: Check package.json
+        run: |
           [ -f package.json ] && git reset HEAD package.json || echo "package.json doesn't exist"
           [ -f package.json ] && git checkout -- package.json || echo "package.json doesn't exist"
-
-          echo '#============ Auto merge ===============#'
+      - name: Auto merge
+        run: |
           git commit -m "Auto-merge" --allow-empty
           git push git@github.com:jhonsouza/rest-api-4.git ${{ github.event.inputs.target_branch }}:${{ github.event.inputs.target_branch }}
+      - name: Remove SSH config
+        run: |
           ssh-agent -k
