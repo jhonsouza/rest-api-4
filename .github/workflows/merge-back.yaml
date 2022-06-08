@@ -11,6 +11,11 @@ jobs:
   merge-back:
     runs-on: ubuntu-latest
     steps:
+      - name: Get email and user name
+        id: vars
+        run: |
+          echo "::set-output name=username::$(git log -n 1 | grep Author | cut -d: -d' ' -f2,3)"
+          echo "::set-output name=email::$(git log -n1 | grep Author | cut -d' ' -d'<' -f2 | cut -d'>' -f1"
       - run: |
           echo '#========= Configure SSH =========#'
           eval `ssh-agent -s`
@@ -26,8 +31,8 @@ jobs:
           echo '#=================================#'
           echo '#========= Configure git =========#'
           git config push.default simple
-          git config user.email "jhonatan.siqueira@passeidireto.com"
-          git config user.name "jhonatan siqueira"
+          git config user.email ${{ steps.vars.outputs.email }}
+          git config user.name ${{ steps.vars.outputs.username }}
           echo '#=================================#'
           git merge remotes/origin/${{ github.event.inputs.branch }} --no-ff --no-commit
 
