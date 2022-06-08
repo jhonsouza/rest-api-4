@@ -11,36 +11,31 @@ jobs:
   merge-back:
     runs-on: ubuntu-latest
     steps:
-      - name: Get email and user name
-        id: vars
-        run: |
-          echo "::set-output name=username::$(git log -n 1 | grep Author | cut -d: -d' ' -f2,3)"
-          echo "::set-output name=email::$(git log -n1 | grep Author | cut -d' ' -d'<' -f2 | cut -d'>' -f1"
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - run: |
-          echo '#========= Configure SSH =========#'
-          eval `ssh-agent -s`
-          echo ${{ secrets.GIT_KEY }} > gitactions
-          chmod 600 gitactions
-          ssh-add gitactions
-          rm gitactions
-          echo '#=================================#'
-          echo '#========= Clone Repo =========#'
-          git clone git@github.com:jhonsouza/rest-api-4.git .
-          git fetch git@github.com:jhonsouza/rest-api-4.git
-          git checkout -B ${{ github.event.inputs.target_branch }}; git checkout -B ${{ github.event.inputs.target_branch }} refs/remotes/origin/${{ github.event.inputs.target_branch }}
-          echo '#=================================#'
-          echo '#========= Configure git =========#'
+          # echo '#========= Configure SSH =========#'
+          # eval `ssh-agent -s`
+          # echo ${{ secrets.GIT_KEY }} > gitactions
+          # chmod 600 gitactions
+          # ssh-add gitactions
+          # rm gitactions
+          # echo '#=================================#'
+          # echo '#========= Clone Repo =========#'
+          # git clone git@github.com:jhonsouza/rest-api-4.git .
+          # git fetch git@github.com:jhonsouza/rest-api-4.git
+          # git checkout -B ${{ github.event.inputs.target_branch }}; git checkout -B ${{ github.event.inputs.target_branch }} refs/remotes/origin/${{ github.event.inputs.target_branch }}
+          # echo '#=================================#'
           git config push.default simple
-          git config user.email ${{ steps.vars.outputs.email }}
-          git config user.name ${{ steps.vars.outputs.username }}
-          echo '#=================================#'
+          git config user.email "tecnologia@passeidireto.com"
+          git config user.name "Github Actions"
           git merge remotes/origin/${{ github.event.inputs.branch }} --no-ff --no-commit
 
-          echo '#===== check if package.json exists and ignore ====#'
           [ -f package.json ] && git reset HEAD package.json || echo "package.json doesn't exist"
           [ -f package.json ] && git checkout -- package.json || echo "package.json doesn't exist"
 
           echo '#============ Auto merge ===============#'
           git commit -m "Auto-merge" --allow-empty
           git push git@github.com:jhonsouza/rest-api-4.git ${{ github.event.inputs.target_branch }}:${{ github.event.inputs.target_branch }}
-          ssh-agent -k
+          # ssh-agent -k
