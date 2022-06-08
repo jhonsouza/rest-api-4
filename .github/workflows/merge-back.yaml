@@ -26,5 +26,5 @@ jobs:
 
           echo '#============ Auto merge ===============#'
           git commit -m "Auto-merge" --allow-empty
-          git push git@github.com:jhonsouza/rest-api-4.git ${{ github.event.inputs.target_branch }}:${{ github.event.inputs.target_branch }}
+          git push https://github.com/jhonsouza/rest-api-4.git ${{ github.event.inputs.target_branch }}:${{ github.event.inputs.target_branch }}
           # ssh-agent -k
