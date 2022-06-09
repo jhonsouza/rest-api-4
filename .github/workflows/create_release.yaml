@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
       - run: |
           git checkout -b release/${{ github.event.inputs.tag_version }} 
-          sed -i 's/"version":[[:space:]]"[0-9].[0-9].[0-9]"/"version":[[:space:]]"${{ github.event.inputs.tag_version }}"/g' package.json
+          sed -i 's/"version":[[:space:]]"[0-9].[0-9].[0-9]"/"version": "${{ github.event.inputs.tag_version }}"/g' package.json
           cat CHANGELOG.md > changelog
           echo "## [${{ github.event.inputs.tag_version }}]" - $(date '+%Y-%m-%d') > CHANGELOG.md
           cat changelog >> CHANGELOG.md && rm changelog
@@ -27,9 +27,9 @@ jobs:
       - name: Open Pull Request
         uses: repo-sync/pull-request@v2
         with:
-          pr_title: "Pulling ${{ github.event.inputs.tag_version }} into master"
+          pr_title: "Pulling release/${{ github.event.inputs.tag_version }} into master"
           source_branch: "release/${{ github.event.inputs.tag_version }}"
           destination_branch: "main"
           github_token: ${{ secrets.GIT_TOKEN }}
-          pr_body: ":crown: *An automated PR*" 
+          pr_body: "*this is a PR created automatically*" 
 
