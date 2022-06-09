@@ -1,9 +1,9 @@
 name: Build payments api
 
 on:
-  # push:
-    # branches:
-      # - develop
+  push:
+    branches:
+      - developer
 
 env:
   Repo: ${{secrets.AWS_PROD_ACCOUNT_ID}}.dkr.ecr.${{secrets.AWS_DEFAULT_REGION}}.amazonaws.com/payments-api

@@ -1,9 +1,9 @@
 name: Rollback release
 
 on:
-  # push:
-  #  branches:
-    #  - release/*
+  push:
+   branches:
+     - releases/*
 jobs:
   pre-test:
     runs-on: ubuntu-latest
