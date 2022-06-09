@@ -10,7 +10,7 @@ jobs:
   increment-version:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone Repos
+      - name: Clone Repo
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
