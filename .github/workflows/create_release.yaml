@@ -24,3 +24,12 @@ jobs:
           git add package.json CHANGELOG.md
           git commit -m "[AUTOMATED]: update changelog and version"
           git push origin release/${{ github.event.inputs.tag_version }}
+      - name: Open Pull Request
+        uses: repo-sync/pull-request@v2
+        with:
+          pr_title: "Pulling ${{ github.event.inputs.tag_version }} into master"
+          source_branch: "release/${{ github.event.inputs.tag_version }}"
+          destination_branch: "main"
+          github_token: ${{ secrets.GIT_TOKEN }}
+          pr_body: ":crown: *An automated PR*" 
+
