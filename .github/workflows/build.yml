@@ -2,8 +2,7 @@ name: Build build
 on:
   push:
     branches:
-      - 'main'
-      - release/*
+      - master
 
 env:
   REPO:  jhonatans/test
