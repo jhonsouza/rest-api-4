@@ -4,14 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       tag_version:
-        required: true
+        description: 'tag to release'
 
 jobs:
-  increment-version:
+  tag-version:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone Repo
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - run: |
