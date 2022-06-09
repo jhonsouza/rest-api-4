@@ -1,0 +1,28 @@
+name: Create Release Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_version:
+        required: true
+
+jobs:
+  increment-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repos
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Create branch
+        run: |
+          git checkout -b release/${{ github.event.inputs.tag_version }} 
+          sed -i 's/"version":[[:space:]]"[0-9].[0-9].[0-9]"/"version":[[:space:]]"${{ github.event.inputs.tag_version }}"/g' package.json
+          cat CHANGELOG.md > changelog
+          echo "## [${{ github.event.inputs.tag_version }}]" - $(date '+%Y-%m-%d') > CHANGELOG.md
+          cat changelog >> CHANGELOG.md && rm changelog
+          git config user.name "Github Actions"
+          git config usere.email "tecnologia@passeidireto.com"
+          git add package.json CHANGELOG.md
+          git commit -m "[AUTOMATED]: update changelog and version"
+          git push origin release/${{ github.event.inputs.tag_version }}

@@ -1,0 +1,28 @@
+name: PR checker
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - develop
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: npm i
+      - name: Run Eslint Test 
+        run: npm run eslint
+      - name: Run Unit Test 
+        run: npm rum coverage
+      - name: Run Dev API Test 
+        run: npm run api-coverage
+      - name: SonarQube Scan
+        uses: sonarsource/sonarcloud-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_INTERNAL_URL }}

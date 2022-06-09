@@ -1,9 +1,9 @@
 name: Build build
 on:
-  push:
-    branches:
-      - 'main'
-      - release/*
+  # push:
+  #   branches:
+  #     - 'main'
+  #     - release/*
 
 env:
   REPO:  jhonatans/test

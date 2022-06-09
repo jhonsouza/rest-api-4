@@ -1,11 +1,13 @@
-name: Merge back in develop
+name: Generate Tag
 
 on:
   workflow_dispatch:
     inputs:
       branch:
         description: 'branch to merge in develop'
+        required: true
       target_branch:
+        required: true
 
 jobs:
   merge-back:
@@ -27,4 +29,3 @@ jobs:
           echo '#============ Auto merge ===============#'
           git commit -m "Auto-merge" --allow-empty
           git push https://github.com/jhonsouza/rest-api-4.git ${{ github.event.inputs.target_branch }}:${{ github.event.inputs.target_branch }}
-  generate_tag:
