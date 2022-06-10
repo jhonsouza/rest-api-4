@@ -26,5 +26,5 @@ jobs:
     needs: [ create_tag ]
     uses: jhonsouza/rest-api-4/.github/workflows/merge-back.yaml@main
     with:
-    source_branch: release/${{ needs.create_tag.outputs.TAG }}
+      source_branch: release/${{ needs.create_tag.outputs.TAG }}
   
