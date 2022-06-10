@@ -19,5 +19,5 @@ jobs:
           tag: "v${{ env.TAG }}"
   merge-back:
     uses: jhonsouza/rest-api-4/.github/workflows/merge-back.yaml@main
-      with:
-        source_branch: release/${{ env.TAG }}
+    with:
+      source_branch: release/${{ env.TAG }}
