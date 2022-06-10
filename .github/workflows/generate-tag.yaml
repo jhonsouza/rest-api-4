@@ -5,7 +5,7 @@ on:
     branches: 
       - main
 env: 
-  - tag-version: $(cat package.json | grep version | cut -d'"' -f4)
+  - TAG: $(cat package.json | grep version | cut -d'"' -f4)
 jobs:
   creted_tag:
     runs-on: ubuntu-latest
