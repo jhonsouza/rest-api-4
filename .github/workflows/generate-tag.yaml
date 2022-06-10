@@ -1,4 +1,4 @@
-name: merge back
+name: generate tag
 
 on:
   push:
@@ -20,6 +20,6 @@ jobs:
         with:
           tag: "v${{ steps.version.outputs.tag_version }}"
       - name: Merge back
-        uses: ./.github/workflows/merge-back.yaml
+        uses: jhonsouza/rest-api-4/.github/workflows/merge-back.yaml
         with:
           source_branch: release/${{ steps.version.outputs.tag_version }}
