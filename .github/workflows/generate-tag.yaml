@@ -7,12 +7,6 @@ on:
 env: 
   - tag-version: $(cat package.json | grep version | cut -d'"' -f4)
 jobs:
-  merge-back:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: jhonsouza/rest-api-4/.github/workflows/merge-back.yaml@main
-        with:
-          source_branch: release/${{ env.TAG }}
   creted_tag:
     runs-on: ubuntu-latest
     steps:
@@ -23,3 +17,7 @@ jobs:
         uses: rickstaa/action-create-tag@v1
         with:
           tag: "v${{ env.TAG }}"
+  merge-back:
+    uses: jhonsouza/rest-api-4/.github/workflows/merge-back.yaml@main
+      with:
+        source_branch: release/${{ env.TAG }}
