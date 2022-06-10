@@ -1,11 +1,11 @@
-name: Merge back in develop
+name: merge back
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      branch:
-        description: 'branch to merge in develop'
-      target_branch:
+      source_branch:
+        required: true
+        type: string
 
 jobs:
   merge-back:
@@ -15,15 +15,15 @@ jobs:
         with:
           fetch-depth: 0
       - run: |
-          git checkout -B ${{ github.event.inputs.target_branch }}; git checkout -B ${{ github.event.inputs.target_branch }} refs/remotes/origin/${{ github.event.inputs.target_branch }}
+          git checkout -B develop; git checkout -B develop refs/remotes/origin/develop
           git config push.default simple
           git config user.email "tecnologia@passeidireto.com"
           git config user.name "Github Actions"
-          git merge remotes/origin/${{ github.event.inputs.branch }} --no-ff --no-commit
+          git merge remotes/origin/${{ inputs.source_branch }} --no-ff --no-commit
 
           [ -f package.json ] && git reset HEAD package.json || echo "package.json doesn't exist"
           [ -f package.json ] && git checkout -- package.json || echo "package.json doesn't exist"
 
           echo '#============ Auto merge ===============#'
-          git commit -m "Auto-merge" --allow-empty
-          git push https://github.com/jhonsouza/rest-api-4.git ${{ github.event.inputs.target_branch }}:${{ github.event.inputs.target_branch }}
+          git commit -m "Auto-merge " --allow-empty
+          git push https://github.com/jhonsouza/rest-api-4.git develop:develop
