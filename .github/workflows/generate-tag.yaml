@@ -4,22 +4,22 @@ on:
   push:
     branches: 
       - main
+env: 
+  - tag-version: $(cat package.json | grep version | cut -d'"' -f4)
 jobs:
   merge-back:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jhonsouza/rest-api-4/.github/workflows/merge-back.yaml@main
+        with:
+          source_branch: release/${{ env.TAG }}
+  creted_tag:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Get version
-        id: version
-        run: |
-          echo "::set-output name=tag_version::$(cat package.json | grep version | cut -d'"' -f4)"
       - name: Generate tag
         uses: rickstaa/action-create-tag@v1
         with:
-          tag: "v${{ steps.version.outputs.tag_version }}"
-      - name: Merge back
-        uses: jhonsouza/rest-api-4/.github/workflows/merge-back.yaml@main
-        with:
-          source_branch: release/${{ steps.version.outputs.tag_version }}
+          tag: "v${{ env.TAG }}"
