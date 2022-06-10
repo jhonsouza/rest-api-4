@@ -1,14 +1,9 @@
-name: Generate Tag
+name: merge back
 
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'branch to merge in develop'
-        required: true
-      target_branch:
-        required: true
-
+  push:
+    branches: 
+      - main
 jobs:
   merge-back:
     runs-on: ubuntu-latest
@@ -16,16 +11,15 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - run: |
-          git checkout -B ${{ github.event.inputs.target_branch }}; git checkout -B ${{ github.event.inputs.target_branch }} refs/remotes/origin/${{ github.event.inputs.target_branch }}
-          git config push.default simple
-          git config user.email "tecnologia@passeidireto.com"
-          git config user.name "Github Actions"
-          git merge remotes/origin/${{ github.event.inputs.branch }} --no-ff --no-commit
-
-          [ -f package.json ] && git reset HEAD package.json || echo "package.json doesn't exist"
-          [ -f package.json ] && git checkout -- package.json || echo "package.json doesn't exist"
-
-          echo '#============ Auto merge ===============#'
-          git commit -m "Auto-merge" --allow-empty
-          git push https://github.com/jhonsouza/rest-api-4.git ${{ github.event.inputs.target_branch }}:${{ github.event.inputs.target_branch }}
+      - name: Get version
+        id: version
+        run: |
+          echo "::set-output name=tag_version::$(cat package.json | grep version | cut -d'"' -f4)"
+      - name: Generate tag
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: "v${{ steps.version.outputs.tag_version }}"
+      - name: Merge back
+        uses: ./.github/workflows/merge-back.yaml
+        with:
+          source_branch: release/${{ steps.version.outputs.tag_version }}
