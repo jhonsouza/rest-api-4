@@ -1,11 +1,12 @@
-name: merge back
+name: generate tag
 
 on:
   push:
     branches: 
       - main
+
 jobs:
-  merge-back:
+  create_tag:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,7 +20,11 @@ jobs:
         uses: rickstaa/action-create-tag@v1
         with:
           tag: "v${{ steps.version.outputs.tag_version }}"
-      - name: Merge back
-        uses: ./.github/workflows/merge-back.yaml
-        with:
-          source_branch: release/${{ steps.version.outputs.tag_version }}
+    outputs:
+      TAG: ${{ steps.version.outputs.tag_version }}
+  merge-back:
+    needs: [ create_tag ]
+    uses: jhonsouza/rest-api-4/.github/workflows/merge-back.yaml@main
+    with:
+      source_branch: release/${{ needs.create_tag.outputs.TAG }}
+  
