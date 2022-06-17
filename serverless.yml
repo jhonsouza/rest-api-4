@@ -1,0 +1,37 @@
+
+service: rest-api-4
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-2
+  stage: 'dev'
+  memorySize: 256
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:PutObject
+      Resource:
+        - "arn:aws:s3:::serverless-test-reports-job"
+
+custom:
+  Environment:
+    dev: true
+    prod: true
+
+functions:
+  hello:
+    handler: ./server/server
+    name: ${self:provider.stage}-reports-job
+    events:
+      - s3:
+          bucket: serverless-test-reports-job
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .csv
+          existing: true
+    
+          
