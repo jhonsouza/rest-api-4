@@ -6,11 +6,8 @@ on:
       - develop
 
 jobs:
-
   deploy:
     runs-on: self-hosted
-    needs: [run-test, pre-deploy]
-    if: ${{ needs.run-test.outputs.jobStatus == 'success'}}
     steps:
       - uses: aws-actions/configure-aws-credentials@v1
         with:
