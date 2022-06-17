@@ -1,85 +1,146 @@
-name: Build build
+name: Deploy Dev Environment
+
 on:
   push:
     branches:
-      - master
-
-env:
-  REPO:  jhonatans/test
+      - develop
 
 jobs:
-  build:
+  pre-test:
     runs-on: ubuntu-latest
     steps:
-      - name: clone repo
-        id: clone
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
         with:
-          fetch-depth: 0
-      - name: Build Image
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Check buildx
-        run: |
-          echo "name: ${{ steps.buildx.outputs.name }}"
-          echo "status: ${{ steps.buildx.outputs.status }}"
-      - name: Login Docker
-        uses: docker/login-action@v1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secrets.AWS_ECS_RUN_TASK_ROLE }}
+          role-duration-seconds: 3600
+      - name: Provide a self hosted to execute this job
+        uses: PasseiDireto/gh-runner-task-action@main
         with:
-          username: jhonatans
-          password: ${{ secrets.DOCKER_TOKEN}}
+          github_pat: ${{ secrets.PD_BOT_GITHUB_ACCESS_TOKEN }}
+          task_definition: "gh-runner"
+          cluster: "gh-runner"
+
+  run-test:
+    runs-on: self-hosted
+    needs: pre-test
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: npm i
+      - name: Run Eslint Test 
+        run: PD_NODE_ENV=development npm run eslint
+      - name: Run Unit Test 
+        run: PD_NODE_ENV=development npm rum coverage
       - name: Get branch
         id: branch
         shell: bash
         run: |
           echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/*/#} | cut -d/ -f3)"
-      - name: Taggin image
-        shell: bash
-        id: vars
+      - name: Run Dev API Test 
         run: |
-          echo ${{steps.branch.outputs.branch}}
-          echo "::set-output name=tag::$(git rev-parse --short HEAD)"
-          echo "::set-output name=author::$(git log -n 1 | grep Author | cut -d: -d' ' -f2,3)"
-          git log -n 1 | grep Author | cut -d: -d' ' -f2,3
-      # - name: Test
-      #   run: |
-      #     npm i && npm test
-      - name: Docker Push
-        run: |
-          docker build -t jhonatans/rest-api-4 .
-          docker tag jhonatans/rest-api-4:latest jhonatans/rest-api-4:${{ steps.vars.outputs.tag}}
-          docker push --all-tags jhonatans/rest-api-4
-        # uses: docker/build-push-action@v2
-        # id: docker
-        # with:
-        #   push: true
-        #   tags: |
-        #     ${{ env.REPO }}:latest
-        #     ${{ env.REPO }}:test
-        #     jhonatans/test:${{ steps.vars.outputs.tag }}
-      - name: Dump GitHub context
+          PD_NODE_ENV=development npm run api-coverage
+      - name: SonarQube Scan
+        uses: sonarsource/sonarcloud-scan-action@master
         env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_INTERNAL_URL }}
+    outputs:
+      jobStatus: ${{ job.status }}
+    continue-on-error: true
+
+  pre-deploy:
+    runs-on: ubuntu-latest
+    needs: run-test
+    if: ${{ needs.run-test.outputs.jobStatus == 'success'}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secrets.AWS_ECS_RUN_TASK_ROLE }}
+          role-duration-seconds: 3600
+      - name: Provide a self hosted to execute this job
+        uses: PasseiDireto/gh-runner-task-action@main
+        with:
+          github_pat: ${{ secrets.PD_BOT_GITHUB_ACCESS_TOKEN }}
+          task_definition: "gh-runner"
+          cluster: "gh-runner"
+
+  deploy:
+    runs-on: self-hosted
+    needs: [run-test, pre-deploy]
+    if: ${{ needs.run-test.outputs.jobStatus == 'success'}}
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE }}
+          role-duration-seconds: 3600
+      - name: checkout repository
+        uses: actions/checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - name: Install Serverless Framework
+        run: npm install -g serverless
+      - name: Install NPM dependencies
+        run: npm i
+      - name: deploy
+        run: sls deploy -s dev --verbose
+    outputs:
+      jobStatus: ${{ job.status }}
+    continue-on-error: true
+
+  test-notification:
+    needs: run-test
+    runs-on: ubuntu-latest
+    steps: 
+      - name: slack failure notification
+        if: ${{ needs.run-test.outputs.jobStatus != 'success'}}
+        uses: rtCamp/action-slack-notify@v2
         env:
-          JOB_CONTEXT: ${{ toJSON(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
+          SLACK_CHANNEL: test-bot
+          SLACK_COLOR: ${{ needs.run-test.outputs.jobStatus }} 
+          SLACK_ICON: https://avatars.githubusercontent.com/u/6343056?s=50&v=4
+          SLACK_MESSAGE: 'the step of run-test was not completed'
+          SLACK_TITLE: run-test
+          SLACK_USERNAME: pd-monetization
+          SLACK_WEBHOOK: ${{ secrets.MONETIZATION_TEST_WEBHOOK }}
+
+  deploy-notification:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:      
+      - name: slack failure notification
+        if: ${{ needs.deploy.outputs.jobStatus != 'success'}}
+        uses: rtCamp/action-slack-notify@v2
         env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump runner context
+          SLACK_CHANNEL: test-bot
+          SLACK_COLOR: ${{ needs.deploy.outputs.jobStatus }} 
+          SLACK_ICON: https://avatars.githubusercontent.com/u/6343056?s=50&v=4
+          SLACK_MESSAGE: 'the step of deploy was not completed, running commit ${{ steps.vars.outputs.commit }}'
+          SLACK_TITLE: deploy
+          SLACK_USERNAME: pd-monetization
+          SLACK_WEBHOOK: ${{ secrets.MONETIZATION_TEST_WEBHOOK }}
+      - name: slack success notification
+        if: ${{ needs.deploy.outputs.jobStatus == 'success'}}
+        uses: rtCamp/action-slack-notify@v2
         env:
-          RUNNER_CONTEXT: ${{ toJSON(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
-    outputs: 
-      jobStatus: ${{job.status}}
+          SLACK_CHANNEL: test-bot
+          SLACK_COLOR: ${{ needs.deploy.outputs.jobStatus }} 
+          SLACK_ICON: https://avatars.githubusercontent.com/u/6343056?s=50&v=4
+          SLACK_MESSAGE: 'the step of deploy was completed, running commit ${{ steps.vars.outputs.commit }}'
+          SLACK_TITLE: deploy
+          SLACK_USERNAME: pd-monetization
+          SLACK_WEBHOOK: ${{ secrets.MONETIZATION_TEST_WEBHOOK }}

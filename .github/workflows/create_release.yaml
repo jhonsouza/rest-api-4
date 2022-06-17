@@ -31,5 +31,4 @@ jobs:
           source_branch: "release/${{ github.event.inputs.tag_version }}"
           destination_branch: "main"
           github_token: ${{ secrets.GIT_TOKEN }}
-          pr_body: "*this is a PR created automatically*" 
-
+          pr_body: "*this is a PR created automatically*"
