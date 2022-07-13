@@ -2,9 +2,8 @@ name: Deploy Dev Environment
 
 on:
   push:
-    branches:
-      - develop
-
+    tags:
+      - 'v*'
 jobs:
   # deploy:
   #   runs-on: ubuntu-latest
