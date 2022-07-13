@@ -1,9 +1,10 @@
-name: Deploy Dev Environment
-
 on:
   push:
     tags:
-      - 'v*'
+      - v*
+
+name: Deploy Dev Environment
+
 jobs:
   # deploy:
   #   runs-on: ubuntu-latest
