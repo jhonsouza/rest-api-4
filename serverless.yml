@@ -8,6 +8,7 @@ provider:
   runtime: nodejs14.x
   region: us-east-2
   stage: 'dev'
+  profile: sandbox
   memorySize: 256
   iamRoleStatements:
     - Effect: Allow

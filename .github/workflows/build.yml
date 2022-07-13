@@ -38,8 +38,7 @@ jobs:
   job2:
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
-  
+      - run: exit 1
   job3:
     runs-on: ubuntu-latest
     steps:
