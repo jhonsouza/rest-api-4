@@ -16,7 +16,7 @@ jobs:
         id: version
         run: |
           echo "::set-output name=tag_version::$(cat package.json | grep version | cut -d'"' -f4)"
-          version=$(cat package.json | grep version | cut -d'"' -f4)"
+          version=$(cat package.json | grep version | cut -d'"' -f4)
           git config user.name "Github Actions"
           git config user.email "tecnologia@passeidireto.com"
           git tag -a v${version}
