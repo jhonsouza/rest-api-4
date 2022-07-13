@@ -1,10 +1,12 @@
 {
-  "name": "rest_api_2",
+  "name": "rest-api-4",
   "version": "1.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "./server/server.js",
   "scripts": {
-    "test": "jest --env node --detectOpenHandles"
+    "test": "jest --env node --detectOpenHandles",
+    "predeploy": "rm -rf package-lock.json && npm i",
+    "deploy": "serverless deploy -s dev --verbose"
   },
   "author": "",
   "license": "ISC",
