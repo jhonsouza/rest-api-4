@@ -1,8 +1,11 @@
 on:
   push:
     # Sequence of patterns matched against refs/tags
-    tags:        
-      - v**
+    branches:
+      - 'release/*'
+  create:
+    branches: 
+      - release/*'
 
 
 name: Deploy Dev Environment
