@@ -1,9 +1,14 @@
-name: Deploy Dev Environment
-
 on:
   push:
+    # Sequence of patterns matched against refs/tags
     branches:
-      - develop
+      - 'release/*'
+  create:
+    branches: 
+      - release/*'
+
+
+name: Deploy Dev Environment
 
 jobs:
   # deploy:

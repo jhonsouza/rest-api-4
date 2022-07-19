@@ -1,0 +1,49 @@
+name: Create Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_bump_type:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+      branch_type:
+        description: 'Type branch'
+        required: true
+        type: choice
+        options:
+          - feature
+          - hotfix
+          - release
+      branch_name:
+        description: 'fill in branch name only for feature branch'
+        type: string
+          
+jobs:
+  create_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - id: TAG
+        run: |
+          git config user.name "github-bot"
+          git config user.email "jhonatan.siqueira@al.resilia.com.br"
+          yarn version --${{ inputs.version_bump_type }} --no-git-tag-version
+          if [ -z ${{ inputs.branch_name }} ]; then
+            branch=${{ inputs.branch_type }}/$(cat package.json | grep version | cut -d'"' -f4)
+          else
+            branch=${{ inputs.branch_type }}/${{ inputs.branch_name }}
+          fi
+          git checkout -b ${branch}
+          git add .
+          git commit -m "[AUTOMATED]: update version"
+          git push origin ${branch}
+          echo "::set-output name=tag_version::$(cat package.json | grep version | cut -d'"' -f4)"
+          echo "::set-output name=branch_source::${branch}"
+      
