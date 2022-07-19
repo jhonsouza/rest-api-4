@@ -31,6 +31,8 @@ jobs:
         with:
           fetch-depth: 0
       - id: TAG
+        env:
+          - GITHUB_TOKEN: ${{ secrets.GIT_TOKEN}}
         run: |
           git config user.name "jhonatan"
           git config user.email "jhonatan.siqueira@al.resilia.com.br"
