@@ -27,10 +27,16 @@ jobs:
   create_branch:
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          if [ $GITHUB_TOKEN == ${{ secrets.GIT_TOKEN }}]; then
+            echo "same value"
+          fi
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - id: TAG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         run: |
           git config user.name "jhonatan"
           git config user.email "jhonatan.siqueira@al.resilia.com.br"
