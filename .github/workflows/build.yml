@@ -5,7 +5,7 @@ on:
       - 'release/*'
   create:
     branches: 
-      - release/*'
+      - 'release/*'
 
 
 name: Deploy Dev Environment
