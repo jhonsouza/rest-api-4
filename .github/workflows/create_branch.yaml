@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          if [ $GITHUB_TOKEN == ${{ secrets.GIT_TOKEN }}]; then
+          if [[ "$GITHUB_TOKEN" == "${{ secrets.GIT_TOKEN }}" ]]; then
             echo "same value"
           fi
       - uses: actions/checkout@v2
