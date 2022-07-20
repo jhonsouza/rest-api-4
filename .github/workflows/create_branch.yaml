@@ -42,7 +42,7 @@ jobs:
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         run: |
-          gh auth login --with-token ${{ secrets.GIT_TOKEN }}
+          gh auth login --with-token < ${{ secrets.GIT_TOKEN }}
           git config user.name "jhonatan"
           git config user.email "jhonatan.siqueira@al.resilia.com.br"
           yarn version --${{ inputs.version_bump_type }} --no-git-tag-version
