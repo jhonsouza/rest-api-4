@@ -39,12 +39,12 @@ jobs:
         with:
           fetch-depth: 0
       - id: TAG
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         run: |
-          gh auth login --with-token < ${{ secrets.GIT_TOKEN }}
           git config user.name "jhonatan"
           git config user.email "jhonatan.siqueira@al.resilia.com.br"
+          gh auth login --with-token ${ GITHUB_TOKEN }
           yarn version --${{ inputs.version_bump_type }} --no-git-tag-version
           if [ -z ${{ inputs.branch_name }} ]; then
             branch=${{ inputs.branch_type }}/$(cat package.json | grep version | cut -d'"' -f4)
