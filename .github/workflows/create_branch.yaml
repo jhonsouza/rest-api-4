@@ -48,7 +48,7 @@ jobs:
           echo "::set-output name=tag_version::$(cat package.json | grep version | cut -d'"' -f4)"
           echo "::set-output name=branch_source::${branch}"
       - name: Open Pull Request
-        if: ${inputs.branch_type} != "feature"
+        if: ${{ inputs.branch_type }} != "feature"
         uses: repo-sync/pull-request@v2
         with:
           pr_title: "Pulling ${{ inputs.branch_type }}/${{ steps.TAG.outputs.tag_version }} into main"
