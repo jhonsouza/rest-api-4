@@ -1,29 +1,20 @@
 name: merge back
 
-on:
-  workflow_call:
-    inputs:
-      source_branch:
-        required: true
-        type: string
+on: workflow_call
 
 jobs:
   merge-back:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - run: |
-          git checkout -B develop; git checkout -B develop refs/remotes/origin/develop
-          git config push.default simple
-          git config user.email "tecnologia@passeidireto.com"
-          git config user.name "Github Actions"
-          git merge remotes/origin/${{ inputs.source_branch }} --no-ff --no-commit
-
-          [ -f package.json ] && git reset HEAD package.json || echo "package.json doesn't exist"
-          [ -f package.json ] && git checkout -- package.json || echo "package.json doesn't exist"
-
-          echo '#============ Auto merge ===============#'
-          git commit -m "Auto-merge " --allow-empty
-          git push https://github.com/jhonsouza/rest-api-4.git develop:develop
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set Git config
+        run: |
+          git config user.name pd-bot
+          git config user.email admin@passeidireto.com
+      - name: Merge back
+        run: |
+          git fetch --unshallow origin develop
+          git switch develop
+          git merge --no-ff -m 'chore: merge-back' main
+          git push

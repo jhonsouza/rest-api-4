@@ -3,12 +3,13 @@ on:
     # Sequence of patterns matched against refs/tags
     branches:
       - 'release/*'
-  create:
-    branches: 
-      - 'release/*'
+      - 'main'
 
 
 name: Deploy Dev Environment
+
+env:
+  BUILD_TAG: $(git rev-parse --short HEAD)
 
 jobs:
   # deploy:
@@ -38,8 +39,9 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
-
+      - run: | 
+          exit 0
+          echo ${{ env.BUILD_TAG }}
   job2:
     runs-on: ubuntu-latest
     steps:
