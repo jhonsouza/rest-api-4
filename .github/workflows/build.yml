@@ -3,7 +3,9 @@ on:
     # Sequence of patterns matched against refs/tags
     branches:
       - 'release/*'
-      - 'main'
+  create:
+    branches: 
+      - 'release/*'
 
 
 name: Deploy Dev Environment
