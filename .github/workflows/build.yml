@@ -9,7 +9,7 @@ on:
 name: Deploy Dev Environment
 
 env:
-  BUILD_TAG: git rev-parse --short HEAD
+  BUILD_TAG: $(git rev-parse --short HEAD)
 
 jobs:
   # deploy:
