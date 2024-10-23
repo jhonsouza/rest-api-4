@@ -1,0 +1,12 @@
+name: Create Branch
+
+on:
+  workflow_dispatch:
+
+jobs:
+    teste:
+        runs-on: ubuntu-latest
+        steps:
+            - run: |
+                echo ${GITHUB_REF/refs\/heads\//}
+
