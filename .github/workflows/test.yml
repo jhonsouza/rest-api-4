@@ -1,4 +1,4 @@
-name: Create Branch
+name: teste script
 
 on:
   workflow_dispatch:
