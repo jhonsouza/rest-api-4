@@ -7,6 +7,7 @@ jobs:
     teste:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v3
             - run: |
                 branch=$(git branch -a --sort=creatordate | grep release | rev | tail -1 | cut -d'/' -f1 | rev | cut -d'.' -f1)
                 echo "Branch: $branch"
