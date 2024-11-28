@@ -9,12 +9,13 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - run: |
-                branch=$(git branch -a --sort=creatordate | grep release | rev | tail -1 | cut -d'/' -f1 | rev | cut -d'.' -f1)
-                echo "Branch: $branch"
-                # Increment the version number
-                ((branch++))
-                echo "New branch: release/$branch"
-                git checkout -b release/$branch
-                git commit --allow-empty -m "[AUTOMATED]: update version"
-                git push origin release/$branch
+                git branch -a --sort=creatordate
+                # branch=$(git branch -a --sort=creatordate | grep release | rev | tail -1 | cut -d'/' -f1 | rev | cut -d'.' -f1)
+                # echo "Branch: $branch"
+                # # Increment the version number
+                # ((branch++))
+                # echo "New branch: release/$branch.0"
+                # git checkout -b release/$branch.0
+                # git commit --allow-empty -m "[AUTOMATED]: update version"
+                # git push origin release/$branch.0
 
