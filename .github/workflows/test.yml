@@ -27,7 +27,7 @@ jobs:
       - name: Generate Tag
         id: tag
         run: |
-          echo "tag=dev-${github.run_id}.${github.sha}" >> $GITHUB_OUTPUT
+          echo "tag=dev-${{ github.run_id }}.${{ github.sha }}" >> $GITHUB_OUTPUT
   teste:
     needs: tags
     runs-on: ubuntu-latest
