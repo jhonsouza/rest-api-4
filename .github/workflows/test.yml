@@ -24,11 +24,15 @@ jobs:
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Generate Tag
         id: tag
         run: |
           short_sha=$(git rev-parse --short HEAD)
-          echo "tag=dev-${{ github.run_number }}.${{ github.sha }}" >> $GITHUB_OUTPUT
+          echo "tag=dev-${{ github.run_number }}.$short_sha" >> $GITHUB_OUTPUT
   teste:
     needs: tags
     runs-on: ubuntu-latest
