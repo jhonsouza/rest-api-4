@@ -27,7 +27,7 @@ jobs:
       - name: Generate Tag
         id: tag
         run: |
-          short_sha=$("${{ github.sha }}".SubString(0, 8))
+          short_sha=$(git rev-parse --short HEAD)
           echo "tag=dev-${{ github.run_number }}.${{ github.sha }}" >> $GITHUB_OUTPUT
   teste:
     needs: tags
