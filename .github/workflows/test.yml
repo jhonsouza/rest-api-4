@@ -27,11 +27,12 @@ jobs:
       - name: Generate Tag
         id: tag
         run: |
-          echo "tag=dev-${{ github.run_id }}.${{ github.sha }}" >> $GITHUB_OUTPUT
+          short_sha=$("${{ github.sha }}".SubString(0, 8))
+          echo "tag=dev-${{ github.run_number }}.${{ github.sha }}" >> $GITHUB_OUTPUT
   teste:
     needs: tags
     runs-on: ubuntu-latest
     steps:
       - name: print
         run: |
-          echo "Tag: ${{ needs.tags.outputs.tag }}
+          echo "Tag: ${{ needs.tags.outputs.tag }}""
