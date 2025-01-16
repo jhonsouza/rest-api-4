@@ -4,19 +4,34 @@ on:
   workflow_dispatch:
 
 jobs:
-    teste:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-              with:
-                fetch-depth: 0
-            - run: |
-                branch=$(git branch -a --sort=creatordate | grep release | rev | tail -1 | cut -d'/' -f1 | rev | cut -d'.' -f1)
-                echo "Branch: $branch"
-                # Increment the version number
-                ((branch++))
-                echo "New branch: release/$branch.0"
-                git checkout -b release/$branch.0
-                git commit --allow-empty -m "[AUTOMATED]: update version"
-                git push origin release/$branch.0
-
+  # teste:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #     - run: |
+  #         branch=$(git branch -a --sort=creatordate | grep release | rev | tail -1 | cut -d'/' -f1 | rev | cut -d'.' -f1)
+  #         echo "Branch: $branch"
+  #         # Increment the version number
+  #         ((branch++))
+  #         echo "New branch: release/$branch.0"
+  #         git checkout -b release/$branch.0
+  #         git commit --allow-empty -m "[AUTOMATED]: update version"
+  #         git push origin release/$branch.0
+  tags:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - name: Generate Tag
+        id: tag
+        run: |
+          echo "tag=dev-${github.run_id}.${github.sha::4}" >> $GITHUB_OUTPUT
+  teste:
+    needs: tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: print
+        run: |
+          echo "Tag: ${{ needs.tags.outputs.tag }}
