@@ -2,7 +2,8 @@ name: teste script
 
 on:
   workflow_dispatch:
-
+env:
+  GLOBAL_ENV: WORKING
 jobs:
   # teste:
   #   runs-on: ubuntu-latest
@@ -43,3 +44,4 @@ jobs:
         run: |
           echo "Tag: ${{ needs.tags.outputs.tag }}"
           echo "Project: ${{ needs.tags.outputs.project }}"
+          echo "Global env: $GLOBAL_ENV"
