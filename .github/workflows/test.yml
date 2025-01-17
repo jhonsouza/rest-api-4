@@ -41,5 +41,5 @@ jobs:
     steps:
       - name: print
         run: |
-          echo "Tag: ${{ needs.tags.outputs.tag }}""
+          echo "Tag: ${{ needs.tags.outputs.tag }}"
           echo "Project: ${{ needs.tags.outputs.project }}"
