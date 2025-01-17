@@ -3,7 +3,7 @@ name: teste script
 on:
   workflow_dispatch:
 env:
-  GLOBAL_ENV: WORKING
+  GLOBAL_ENV: jhonsouza/rest-api-4/.github/workflows
 jobs:
   # teste:
   #   runs-on: ubuntu-latest
@@ -45,3 +45,6 @@ jobs:
           echo "Tag: ${{ needs.tags.outputs.tag }}"
           echo "Project: ${{ needs.tags.outputs.project }}"
           echo "Global env: $GLOBAL_ENV"
+  teste2:
+    uses: $GLOBAL_ENV/teste2.yaml@main
+    secrets: inherit
