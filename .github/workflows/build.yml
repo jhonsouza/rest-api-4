@@ -4,7 +4,8 @@ on:
     branches:
       - 'release/*'
       - 'main'
-
+    paths-ignore:
+      - .github/*
 
 name: Deploy Dev Environment
 
