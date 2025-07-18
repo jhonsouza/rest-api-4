@@ -16,6 +16,10 @@ jobs:
     outputs:
       out: ${{ steps.genTag.outputs.image }}
     steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
