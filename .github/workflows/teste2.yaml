@@ -1,32 +1,14 @@
-name: teste 2 script
+name: Call a reusable workflow and use its outputs
 
 on:
-  workflow_call:
-env:
-  GLOBAL_ENV: WORKING
+  workflow_dispatch:
+
 jobs:
-  tags:
+  job1:
+    uses: ./.github/workflows/test.yml
+
+  job2:
     runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.tag.outputs.tag }}
-      project: ${{ steps.tag.outputs.project }}
+    needs: job1
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Generate Tag
-        id: tag
-        run: |
-          short_sha=$(git rev-parse --short HEAD)
-          echo "tag=dev-${{ github.run_number }}.$short_sha" >> $GITHUB_OUTPUT
-          echo "project=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_OUTPUT
-  teste:
-    needs: tags
-    runs-on: ubuntu-latest
-    steps:
-      - name: print
-        run: |
-          echo "Tag: ${{ needs.tags.outputs.tag }}"
-          echo "Project: ${{ needs.tags.outputs.project }}"
-          echo "Global env: $GLOBAL_ENV"
+      - run: echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}

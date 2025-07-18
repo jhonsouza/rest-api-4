@@ -1,50 +1,26 @@
-name: teste script
+name: Reusable workflow
 
 on:
-  workflow_dispatch:
-env:
-  GLOBAL_ENV: jhonsouza/rest-api-4/.github/workflows
-jobs:
-  # teste:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #     - run: |
-  #         branch=$(git branch -a --sort=creatordate | grep release | rev | tail -1 | cut -d'/' -f1 | rev | cut -d'.' -f1)
-  #         echo "Branch: $branch"
-  #         # Increment the version number
-  #         ((branch++))
-  #         echo "New branch: release/$branch.0"
-  #         git checkout -b release/$branch.0
-  #         git commit --allow-empty -m "[AUTOMATED]: update version"
-  #         git push origin release/$branch.0
-  tags:
-    runs-on: ubuntu-latest
+  workflow_call:
+    # Map the workflow outputs to job outputs
     outputs:
-      tag: ${{ steps.tag.outputs.tag }}
-      project: ${{ steps.tag.outputs.project }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Generate Tag
-        id: tag
-        run: |
-          short_sha=$(git rev-parse --short HEAD)
-          echo "tag=dev-${{ github.run_number }}.$short_sha" >> $GITHUB_OUTPUT
-          echo "project=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_OUTPUT
-  teste:
-    needs: tags
+      firstword:
+        description: "The first output string"
+        value: ${{ jobs.example_job.outputs.output1 }}
+      secondword:
+        description: "The second output string"
+        value: ${{ jobs.example_job.outputs.output2 }}
+
+jobs:
+  example_job:
+    name: Generate output
     runs-on: ubuntu-latest
+    # Map the job outputs to step outputs
+    outputs:
+      output1: ${{ steps.step1.outputs.firstword }}
+      output2: ${{ steps.step2.outputs.secondword }}
     steps:
-      - name: print
-        run: |
-          echo "Tag: ${{ needs.tags.outputs.tag }}"
-          echo "Project: ${{ needs.tags.outputs.project }}"
-          echo "Global env: $GLOBAL_ENV"
-  teste2:
-    uses: $GLOBAL_ENV/teste2.yaml@main
-    secrets: inherit
+      - id: step1
+        run: echo "firstword=hello" >> $GITHUB_OUTPUT
+      - id: step2
+        run: echo "secondword=world" >> $GITHUB_OUTPUT
