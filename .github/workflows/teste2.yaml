@@ -12,4 +12,5 @@ jobs:
     uses: ./.github/workflows/teste.yaml
     with:
       image: ${{ needs.job1.outputs.image }}
+    secrets: inherit
     
