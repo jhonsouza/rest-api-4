@@ -37,7 +37,7 @@ jobs:
         run: |
           if [[ "${GITHUB_REF#refs/heads/}" == "main" ]]; then
               echo "main branch"
-          else
+          fi
           git_hash=$(git rev-parse --short HEAD)
           tag="test-$git_hash"
           echo "tag=$tag" >> $GITHUB_ENV
