@@ -1,0 +1,16 @@
+name: Call a reusable workflow and use its outputs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  job1:
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
+  job2:
+    needs: job1
+    uses: ./.github/workflows/teste.yaml
+    with:
+      image: ${{ needs.job1.outputs.image }}
+    secrets: inherit
+    
