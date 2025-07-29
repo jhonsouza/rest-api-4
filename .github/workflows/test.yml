@@ -39,3 +39,5 @@ jobs:
           tag="test-$git_hash"
           echo "tag=$tag" >> $GITHUB_ENV
           echo "image=$repo:$tag" >> $GITHUB_OUTPUT
+          echo ${{ github.ref}}
+          echo ${GITHUB_REF#refs/heads/}
