@@ -14,7 +14,7 @@ on:
 jobs:
   job0:
     name: teste
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     steps:
       - run: |
           echo ${{ inputs.materialType }}
