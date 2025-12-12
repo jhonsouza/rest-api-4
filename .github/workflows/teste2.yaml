@@ -2,8 +2,22 @@ name: Call a reusable workflow and use its outputs
 
 on:
   workflow_dispatch:
-
+    inputs:
+      materialType:
+        description: Material type to be pruned
+        type: choice
+        required: false
+        options:
+          - file
+          - question
+          - video
 jobs:
+  job0:
+    name: teste
+    runs-on: ubuntu
+    steps:
+      - run: |
+          echo ${{ inputs.materialType }}
   job1:
     uses: ./.github/workflows/test.yml
     secrets: inherit
