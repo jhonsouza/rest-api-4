@@ -1,8 +1,5 @@
-name: Reusable workflow
-
 on:
   workflow_call:
-    # Map the workflow outputs to job outputs
     inputs:
       image:
         type: string
@@ -11,4 +8,4 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ inputs.image }}
+      - run: echo "${{ inputs.image }}"
