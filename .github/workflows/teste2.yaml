@@ -22,5 +22,11 @@ jobs:
         run: |
           if [ -z ${{ inputs.appName }}]; then
             echo "Getting app name from branch"
-            echo "branch=$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} | cut -d'/' -f2)"
+            appName=$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} | cut -d'/' -f2)
+            echo APPNAME=$appName >> $GITHUB_ENV
+          else
+            echo APPNAME=${{ inputs.appName }} >> $GITHUB_ENV
           fi
+      - name: Print App Name
+        run: |
+          echo $APPANME
