@@ -16,32 +16,7 @@ jobs:
     outputs:
       out: ${{ steps.genTag.outputs.image }}
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: 'us-east-2'
-          role-duration-seconds: 3600
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
-        id: login-ecr
-      - name: Generate Tag
+      - name: genTag
         id: genTag
-        env:
-          repo: ${{ steps.login-ecr.outputs.registry }}/rdf-categorization-consumer
         run: |
-          if [[ "${GITHUB_REF#refs/heads/}" != "main" ]]; then
-              echo "Não é a branch main"
-              exit 1
-          fi
-          git_hash=$(git rev-parse --short HEAD)
-          tag="test-$git_hash"
-          echo "tag=$tag" >> $GITHUB_ENV
-          echo "image=$repo:$tag" >> $GITHUB_OUTPUT
-          echo ${{ github.ref}}
-          echo ${GITHUB_REF#refs/heads/}
+          echo "image=dev-189" >> $GITHUB_OUTPUT
