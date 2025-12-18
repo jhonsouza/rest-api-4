@@ -37,16 +37,18 @@ jobs:
     secrets: inherit
 
   job1-1:
-    needs: job0
+    needs: job1
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "Build output image: ${{ needs.job1.outputs.image}}"
+          echo "Build output image: ${{ needs.job1.outputs.image }}"
           echo "All build outputs:"
-          echo "${{ toJSON(needs.job1-1.outputs) }}"
+          echo '${{ toJSON(needs.job1.outputs) }}'
+
         
   job2:
     needs: job1
     uses: ./.github/workflows/teste.yaml
     with:
-      image: ${{ needs.job1.output.image }}
+      image: ${{ needs.job1.outputs.image }}
+
