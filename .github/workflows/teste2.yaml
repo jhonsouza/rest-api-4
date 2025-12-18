@@ -29,4 +29,4 @@ jobs:
           fi
       - name: Print App Name
         run: |
-          echo $APPANME
+          echo $APPNAME
