@@ -30,3 +30,14 @@ jobs:
       - name: Print App Name
         run: |
           echo $APPNAME
+
+  job1:
+    needs: job0
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
+
+  job2:
+    needs: job1
+    uses: ./.github/workflows/teste.yaml
+    with:
+      image: ${{ needs.job1.output.image }}
