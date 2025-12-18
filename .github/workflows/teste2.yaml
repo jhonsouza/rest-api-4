@@ -22,6 +22,5 @@ jobs:
         run: |
           if [ -z ${{ inputs.appName }}]; then
             echo "Getting app name from branch"
-            branch=$(git branch -a --sort=creatordate | grep feature | rev | tail -1 | cut -d'/' -f1 | rev)
-            echo $branch
+            echo ${{ git.ref }}
           fi
