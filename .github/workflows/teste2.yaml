@@ -1,23 +1,26 @@
 name: Call a reusable workflow and use its outputs
 
 on:
+  push:
+    branches:
+      - feature/*
   workflow_dispatch:
     inputs:
-      materialType:
-        description: Material type to be pruned
-        type: choice
-        required: false
-        options:
-          - file
-          - question
-          - video
+      appName:
+        description: The name of the app to deploy
+        required: true
 jobs:
   job0:
     name: teste
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo ${{ inputs.materialType }}
+      - name: validate app name
+        run: |
+          if [ -z ${{ inputs.appName }}]; then
+            echo "Getting app name from branch"
+            branch=$(git branch -a --sort=creatordate | grep feature | rev | tail -1 | cut -d'/' -f1 | rev)
+            echo $branch
+      
   job1:
     uses: ./.github/workflows/test.yml
     secrets: inherit
