@@ -30,25 +30,5 @@ jobs:
       - name: Print App Name
         run: |
           echo $APPNAME
-
-  job1:
-    needs: job0
-    uses: ./.github/workflows/test.yml
-    secrets: inherit
-
-  job1-1:
-    needs: job1
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "Build output image: ${{ needs.job1.outputs.image }}"
-          echo "All build outputs:"
-          echo '${{ toJSON(needs.job1.outputs) }}'
-
-        
-  job2:
-    needs: job1
-    uses: ./.github/workflows/teste.yaml
-    with:
-      image: ${{ needs.job1.outputs.image }}
-
+          basePath=$(echo ${APPNAME//-/\/})
+          echo $basePath
