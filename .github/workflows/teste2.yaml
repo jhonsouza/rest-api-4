@@ -56,3 +56,10 @@ jobs:
         run: |
           echo ${{ inputs.tag }}
           echo ${{ inputs.appName }}
+  job3:
+    name: check if branch is a release
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'release/*' }}
+    steps:
+      - name: validade
+        run: echo ${{ github.ref_name }}
