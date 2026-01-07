@@ -32,3 +32,4 @@ jobs:
           echo $APPNAME
           basePath=$(echo ${APPNAME//-/\/})
           echo $basePath
+          echo ${{ github.ref }}
