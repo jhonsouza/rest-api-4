@@ -12,3 +12,5 @@ jobs:
     steps:
       - id: genTag
         run: echo "image=dev-189" >> $GITHUB_OUTPUT
+      - run: echo ${{ github.ref }}
+          
