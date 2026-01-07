@@ -9,6 +9,10 @@ on:
       appName:
         description: The name of the app to deploy
         required: true
+      tag:
+        required: true
+        type: boolean
+        default: false
 jobs:
   job0:
     name: teste
@@ -33,7 +37,7 @@ jobs:
           basePath=$(echo ${APPNAME//-/\/})
           echo $basePath
   job1:
-    name: run if tag
+    name: run if ref_type
     runs-on: ubuntu-latest
     if: ${{ github.ref_type == 'tag' }}
     steps:
@@ -43,3 +47,12 @@ jobs:
           echo ${{ github.ref_type }}
           echo ${{ github.triggering_actor }}
           echo ${{ github.actor }}
+  job2:
+    name: run if tag input is true
+    runs-on: ubuntu-latest
+    if: ${{ inputs.tag }}
+    steps:
+      - name: print inputs
+        run: |
+          echo ${{ inputs.tag }}
+          echo ${{ inputs.appName }}
