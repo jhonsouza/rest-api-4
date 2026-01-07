@@ -22,9 +22,24 @@ jobs:
         run: |
           if [ -z ${{ inputs.appName }}]; then
             echo "Getting app name from branch"
-            branch=$(git branch -a --sort=creatordate | grep feature | rev | tail -1 | cut -d'/' -f1 | rev)
-            echo $branch
+            appName=$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} | cut -d'/' -f2)
+            echo APPNAME=$appName >> $GITHUB_ENV
+          else
+            echo APPNAME=${{ inputs.appName }} >> $GITHUB_ENV
           fi
-      
- 
-    
+      - name: Print App Name
+        run: |
+          echo $APPNAME
+          basePath=$(echo ${APPNAME//-/\/})
+          echo $basePath
+  job1:
+    name: run if tag
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_type == 'tag' }}
+    steps:
+      - name: Print github context
+        run: |
+          echo ${{ github.ref_name }}
+          echo ${{ github.ref_type }}
+          echo ${{ github.triggering_actor }}
+          echo ${{ github.actor }}
