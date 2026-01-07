@@ -59,7 +59,7 @@ jobs:
   job3:
     name: check if branch is a release
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'release/*' }}
+    if: contains(github.ref_name,'release')
     steps:
       - name: validade
         run: echo ${{ github.ref_name }}
