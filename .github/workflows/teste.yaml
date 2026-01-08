@@ -1,11 +1,14 @@
-on:
-  workflow_call:
-    inputs:
-      image:
-        type: string
+name: Pr Checker
+
+on: pull_request
 
 jobs:
-  test:
+  check:
+    name: check ref_name on PR
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ inputs.image }}"
+      - run: |
+          echo ${{ github.ref_name }}
+          echo ${{ github.base_ref }}
+          echo ${{ github.head_ref }}
+    
