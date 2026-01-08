@@ -7,5 +7,8 @@ jobs:
     name: check ref_name on PR
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ github.ref_name }}
+      - run: |
+          echo ${{ github.ref_name }}
+          echo ${{ github.base_ref }}
+          echo ${{ github.head_ref }}
     
