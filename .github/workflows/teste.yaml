@@ -1,14 +1,14 @@
-name: Reusable workflow
+name: Pr Checker
 
-on:
-  workflow_call:
-    # Map the workflow outputs to job outputs
-    inputs:
-      image:
-        type: string
+on: pull_request
 
 jobs:
-  test:
+  check:
+    name: check ref_name on PR
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ inputs.image }}
+      - run: |
+          echo ${{ github.ref_name }}
+          echo ${{ github.base_ref }}
+          echo ${{ github.head_ref }}
+    

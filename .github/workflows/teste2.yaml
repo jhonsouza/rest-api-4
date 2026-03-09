@@ -1,16 +1,65 @@
 name: Call a reusable workflow and use its outputs
 
 on:
+  push:
+    branches:
+      - feature/*
   workflow_dispatch:
-
+    inputs:
+      appName:
+        description: The name of the app to deploy
+        required: true
+      tag:
+        required: true
+        type: boolean
+        default: false
 jobs:
+  job0:
+    name: teste
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: validate app name
+        run: |
+          if [ -z ${{ inputs.appName }}]; then
+            echo "Getting app name from branch"
+            appName=$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} | cut -d'/' -f2)
+            echo APPNAME=$appName >> $GITHUB_ENV
+          else
+            echo APPNAME=${{ inputs.appName }} >> $GITHUB_ENV
+          fi
+      - name: Print App Name
+        run: |
+          echo $APPNAME
+          basePath=$(echo ${APPNAME//-/\/})
+          echo $basePath
   job1:
-    uses: ./.github/workflows/test.yml
-    secrets: inherit
+    name: run if ref_type
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_type == 'tag' }}
+    steps:
+      - name: Print github context
+        run: |
+          echo ${{ github.ref_name }}
+          echo ${{ github.ref_type }}
+          echo ${{ github.triggering_actor }}
+          echo ${{ github.actor }}
   job2:
-    needs: job1
-    uses: ./.github/workflows/teste.yaml
-    with:
-      image: ${{ needs.job1.outputs.image }}
-    secrets: inherit
-    
+    name: run if tag input is true
+    runs-on: ubuntu-latest
+    if: ${{ inputs.tag }}
+    steps:
+      - name: print inputs
+        run: |
+          echo ${{ inputs.tag }}
+          echo ${{ inputs.appName }}
+  job3:
+    name: check if branch is a release
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'release/*' }}
+    steps:
+      - name: validade
+        run: echo ${{ github.ref_name }}
