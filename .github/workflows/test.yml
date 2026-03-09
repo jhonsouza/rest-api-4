@@ -1,16 +1,34 @@
+name: Tag test
+
+
 on:
-  workflow_call:
-    outputs:
-      image:
-        value: ${{ jobs.example_job.outputs.out }}
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to deploy"
+        type: boolean
+        default: true
 
 jobs:
-  example_job:
+  create_tag:
+    name: create git tag
+    uses: ./.github/workflows/generate-tag.yaml
+    secrets: inherit
+
+  teste:
+    if: ${{ github.ref_type == 'tag' }}
     runs-on: ubuntu-latest
-    outputs:
-      out: ${{ steps.genTag.outputs.image }}
     steps:
-      - id: genTag
-        run: echo "image=dev-189" >> $GITHUB_OUTPUT
-      - run: echo ${{ github.ref }}
-          
+      - run: |
+          echo "tag: ${{ github.ref }}"
+          read currentTag previousTag <<< "$(git tag --sort=-creatordate | grep v | head -n 2 | tr '\n' ' ')"
+          echo "currentTag: $currentTag"
+          echo "previousTag: $previousTag"
+          if [ git diff $previousTag $currentTag --quiet ]; then
+            echo "No changes between $previousTag and $currentTag"
+          else
+            echo "Changes between $previousTag and $currentTag"
+          fi
