@@ -32,3 +32,6 @@ jobs:
         with:
           commit_message: "docs(CHANGELOG): update for release ${{ github.ref_name }}"
           file_pattern: CHANGELOG.md
+      - name: Anything
+        run: |
+          echo "anything"
