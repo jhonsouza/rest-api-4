@@ -35,3 +35,4 @@ jobs:
           else
             echo "Changes between $previousTag and $currentTag"
           fi
+          read currentReleaseCommit previousReleaseCommit <<< "$(git for-each-ref --sort=-committerdate --count=2 --format="%(objectname)" refs/remotes/origin/release | tr '\n' ' ')"
