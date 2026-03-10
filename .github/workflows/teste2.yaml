@@ -1,65 +1,33 @@
-name: Call a reusable workflow and use its outputs
+name: Generate Changelog
 
 on:
   push:
-    branches:
-      - feature/*
-  workflow_dispatch:
-    inputs:
-      appName:
-        description: The name of the app to deploy
-        required: true
-      tag:
-        required: true
-        type: boolean
-        default: false
+    tags:
+      - 'v*' # Triggers the workflow when a tag starting with 'v' is pushed
+
 jobs:
-  job0:
-    name: teste
+  build_changelog:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      - name: validate app name
-        run: |
-          if [ -z ${{ inputs.appName }}]; then
-            echo "Getting app name from branch"
-            appName=$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} | cut -d'/' -f2)
-            echo APPNAME=$appName >> $GITHUB_ENV
-          else
-            echo APPNAME=${{ inputs.appName }} >> $GITHUB_ENV
-          fi
-      - name: Print App Name
-        run: |
-          echo $APPNAME
-          basePath=$(echo ${APPNAME//-/\/})
-          echo $basePath
-  job1:
-    name: run if ref_type
-    runs-on: ubuntu-latest
-    if: ${{ github.ref_type == 'tag' }}
-    steps:
-      - name: Print github context
-        run: |
-          echo ${{ github.ref_name }}
-          echo ${{ github.ref_type }}
-          echo ${{ github.triggering_actor }}
-          echo ${{ github.actor }}
-  job2:
-    name: run if tag input is true
-    runs-on: ubuntu-latest
-    if: ${{ inputs.tag }}
-    steps:
-      - name: print inputs
-        run: |
-          echo ${{ inputs.tag }}
-          echo ${{ inputs.appName }}
-  job3:
-    name: check if branch is a release
-    runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'release/*' }}
-    steps:
-      - name: validade
-        run: echo ${{ github.ref_name }}
+          # Fetch all history and tags to generate an accurate changelog
+          fetch-depth: 0 
+
+      - name: Generate Changelog
+        id: changelog
+        uses: requarks/changelog-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # The tag name from the event (e.g., v1.0.0)
+          tag: ${{ github.ref_name }}
+          # Automatically writes to CHANGELOG.md
+          writeToFile: true 
+
+      - name: Commit updated CHANGELOG.md
+        # Use an action to commit the changes made by the changelog action
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs(CHANGELOG): update for release ${{ github.ref_name }}"
+          file_pattern: CHANGELOG.md
