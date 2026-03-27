@@ -24,6 +24,7 @@ jobs:
         with:
           ref: ${{ inputs.target_branch }}
           token: ${{ secrets.GIT_TOKEN }}
+          fetch-depth: 0
       - name: Check changes in IaC directory
         id: check-iac-changes
         run: |
