@@ -24,6 +24,8 @@ jobs:
         with:
           ref: ${{ inputs.target_branch }}
           token: ${{ secrets.GIT_TOKEN }}
+          # Shallow clone (default depth 1) does not fetch tag refs; git tag stays empty/incomplete.
+          fetch-depth: 0
       - name: Check changes in IaC directory
         id: check-iac-changes
         run: |
