@@ -1,37 +1,40 @@
 name: Tag test
 
-
 on:
-  push:
-    tags:
-      - "v*"
-  workflow_dispatch:
+  workflow_call:
+    outputs:
+      changes_found:
+        description: 'Changes found in IaC directory'
+        value: ${{ jobs.check-iac-changes.outputs.changes_found }}
     inputs:
-      tag:
-        description: "Tag to deploy"
-        type: boolean
-        default: true
+      target_branch:
+        description: 'Target branch to check for changes'
+        type: string
+        required: true
 
 jobs:
-  create_tag:
-    name: create git tag
-    uses: ./.github/workflows/generate-tag.yaml
-    secrets: inherit
-
-  teste:
-    if: ${{ github.ref_type == 'tag' }}
+  check-iac-changes:
+    name: Check Changes in IaC Directory
     runs-on: ubuntu-latest
+    outputs:
+      changes_found: ${{ steps.check-iac-changes.outputs.changes_found }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v5
         with:
-          fetch-depth: 0
-      - run: |
-          echo "tag: ${{ github.ref }}"
+          ref: ${{ inputs.target_branch }}
+          token: ${{ secrets.GIT_TOKEN }}
+      - name: Check changes in IaC directory
+        id: check-iac-changes
+        run: |
           read currentTag previousTag <<< "$(git tag --sort=-creatordate | grep v | head -n 2 | tr '\n' ' ')"
-          echo "currentTag: $currentTag"
-          echo "previousTag: $previousTag"
-          if [ git diff $previousTag $currentTag --quiet ]; then
-            echo "No changes between $previousTag and $currentTag"
+          if [ -z "$previousTag" ]; then
+            echo "no previous tag found"
+            echo "changes_found=true" >> $GITHUB_OUTPUT
+          elif git diff $currentTag $previousTag --quiet -- .stack ; then
+            echo "no changes found in IaC directory"
+            echo "changes_found=false" >> $GITHUB_OUTPUT
           else
-            echo "Changes between $previousTag and $currentTag"
+            echo "changes found in IaC directory"
+            echo "changes_found=true" >> $GITHUB_OUTPUT
           fi

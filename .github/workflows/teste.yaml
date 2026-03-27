@@ -1,14 +1,35 @@
 name: Pr Checker
 
-on: pull_request
+on: 
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+    inputs:
+      create_tag:
+        description: 'create tag'
+        type: boolean
+        default: true
+        required: true
 
 jobs:
-  check:
-    name: check ref_name on PR
+  create_tag:
+    if: ${{ inputs.create_tag }}
+    name: create git tag
+    uses: ./.github/workflows/generate-tag.yaml
+    secrets: inherit
+  
+  check-iac-changes:
+    if: ${{ github.ref_type == 'tag' }}
+    name: check iac changes
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
+    with:
+      target_branch: ${{ github.ref_name }}
+
+  print:
+    needs: [ check-iac-changes ]
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo ${{ github.ref_name }}
-          echo ${{ github.base_ref }}
-          echo ${{ github.head_ref }}
-  
+          echo "changes_found: ${{ needs.check-iac-changes.outputs.changes_found }}"
