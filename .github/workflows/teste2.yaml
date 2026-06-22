@@ -1,37 +1,29 @@
-name: Generate Changelog
+name: Create release and deploy to Tst
 
 on:
   push:
-    tags:
-      - 'v*' # Triggers the workflow when a tag starting with 'v' is pushed
+    branches:
+      - release/*
   workflow_dispatch:
+    inputs:
+      create_release:
+        description: "Create release branch from develop"
+        type: boolean
+        default: true
+      version_type:
+        description: "Version bump type"
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
 
-jobs:
-  build_changelog:
+jobs: 
+  teste:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          # Fetch all history and tags to generate an accurate changelog
-          fetch-depth: 0 
-
-      - name: Generate Changelog
-        id: changelog
-        uses: requarks/changelog-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # The tag name from the event (e.g., v1.0.0)
-          tag: ${{ github.ref_name }}
-          # Automatically writes to CHANGELOG.md
-          writeToFile: true 
-
-      - name: Commit updated CHANGELOG.md
-        # Use an action to commit the changes made by the changelog action
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "docs(CHANGELOG): update for release ${{ github.ref_name }}"
-          file_pattern: CHANGELOG.md
-      - name: Anything
-        run: |
-          echo "anything"
+      - run: |
+          echo ${{ inputs.create_release }}
+          echo ${{ inputs.version_type }}
+      
