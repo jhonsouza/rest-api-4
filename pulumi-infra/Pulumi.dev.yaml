@@ -8,3 +8,4 @@ config:
       pd:tier: infra
       pd:owner: monetization
       pd:repo: https://github.com/PasseiDireto/payments-api
+      pd:version: 1.2.2

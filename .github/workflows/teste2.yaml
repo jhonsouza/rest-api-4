@@ -1,16 +1,35 @@
-name: Call a reusable workflow and use its outputs
+name: Create release and deploy to Tst
 
 on:
+  push:
+    branches:
+      - release/*
   workflow_dispatch:
+    inputs:
+      create_release:
+        description: "Create release branch from develop"
+        type: boolean
+        default: true
+      version_type:
+        description: "Version bump type"
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
 
-jobs:
-  job1:
-    uses: ./.github/workflows/test.yml
-    secrets: inherit
-  job2:
-    needs: job1
-    uses: ./.github/workflows/teste.yaml
-    with:
-      image: ${{ needs.job1.outputs.image }}
-    secrets: inherit
-    
+jobs: 
+  teste:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo ${{ inputs.create_release }}
+          echo ${{ inputs.version_type }}
+      
+  condicional:
+    if: ${{ inputs.create_release && github.ref_name == 'develop' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "create release"

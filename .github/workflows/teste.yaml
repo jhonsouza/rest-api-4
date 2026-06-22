@@ -1,14 +1,35 @@
-name: Reusable workflow
+name: Pr Checker
 
-on:
-  workflow_call:
-    # Map the workflow outputs to job outputs
+on: 
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
     inputs:
-      image:
-        type: string
+      create_tag:
+        description: 'create tag'
+        type: boolean
+        default: true
+        required: true
 
 jobs:
-  test:
+  create_tag:
+    if: ${{ inputs.create_tag }}
+    name: create git tag
+    uses: ./.github/workflows/generate-tag.yaml
+    secrets: inherit
+  
+  check-iac-changes:
+    if: ${{ github.ref_type == 'tag' }}
+    name: check iac changes
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
+    with:
+      target_branch: ${{ github.ref_name }}
+
+  print:
+    needs: [ check-iac-changes ]
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ inputs.image }}
+      - run: |
+          echo "changes_found: ${{ needs.check-iac-changes.outputs.changes_found }}"
