@@ -27,3 +27,9 @@ jobs:
           echo ${{ inputs.create_release }}
           echo ${{ inputs.version_type }}
       
+  condicional:
+    if: ${{ inputs.create_release && github.ref_name == 'develop' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "create release"
